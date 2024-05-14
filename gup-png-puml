@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. "$srcdir/build/common.sh"
+
+src="$srcdir/doc/$(basename "$2" .png).puml"
+
+gup -u "$src"
+
+cat "$src" | plantuml -darkmode -pipe > "$1"
