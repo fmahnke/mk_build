@@ -16,3 +16,6 @@ if [ -z "${builddir:-}" ]; then
     builddir="$(pwd)"
     printf 'Auto-detected build directory: builddir=%s\n' "$builddir"
 fi
+
+printf "srcdir=%s\n" "$srcdir" > "$builddir/config.sh"
+printf "builddir=%s\n" "$builddir" >> "$builddir/config.sh"
