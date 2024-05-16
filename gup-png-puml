@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. "$srcdir/build/common.sh"
+. "${srcdir:?}/build/build.sh"
 
 src="$srcdir/doc/$(basename "$2" .png).puml"
 

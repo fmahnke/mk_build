@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. $srcdir/build/common.sh
+. ${srcdir:?}/build/build.sh
 
 debug "$@"
 
@@ -8,7 +8,7 @@ echo "cc  $2"
 
 CPPFLAGS="-I$srcdir"
 
-if [ -z "$M_CPPFLAGS"]; then
+if [ -z "$M_CPPFLAGS" ]; then
     target_dir=$(dir "$target")
     M_CPPFLAGS="-I$srcdir/$target_dir -I$srcdir/$target_dir/include"
 fi
@@ -19,4 +19,4 @@ src="$(ext $2 c)"
 
 gup -u "$srcdir/$src"
 
-gcc "$CPPFLAGS" $M_CPPFLAGS -c -o "$1" "$srcdir/$src"
+gcc "$CPPFLAGS" $M_CPPFLAGS -c -o "$output" "$srcdir/$src"
