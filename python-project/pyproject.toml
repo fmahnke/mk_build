@@ -1,0 +1,32 @@
+[project]
+name = "gup_build"
+version = "0.0.1"
+requires-python = ">=3.10"
+
+dependencies = [
+]
+
+[project.optional-dependencies]
+test = [
+    "coverage",
+    "flake8",
+    "mypy",
+    "types-peewee",
+    "pytest"
+]
+
+#[project.scripts]
+#mkdash = "dashboard.dashboard:main"
+
+#[project.entry-points."entry"]
+#mkdash1 = "dashboard.dashboard:main"
+
+[tool.coverage.run]
+source = [ "python_package" ]
+
+[tool.mypy]
+explicit_package_bases = true
+packages = [ "python_package", "test" ]
+
+[tool.pytest.ini_options]
+testpaths = [ "test" ]

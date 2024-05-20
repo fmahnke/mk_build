@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+import sys
+
+import build
+from build import run, top_source_dir
+from build.path import name, path, path_dir
+
+output = sys.argv[1]
+target = sys.argv[2]
+
+print(f'output={output}')
+print(f'target={target}')
+
+m_asm_ppflags = build.environ('M_ASM_PPFLAGS', True)
+
+print(f'o-asm  {target}')
+
+source = path(top_source_dir(), path(target).with_suffix('.asm'))
+
+target_source_dir = path_dir(source)
+
+args = ['nasm', '-f', 'elf32', '-g', '-w+error', '-i', target_source_dir,
+    m_asm_ppflags, '-o', output, source]
+
+result = build.run(args)
+
+sys.exit(result)
