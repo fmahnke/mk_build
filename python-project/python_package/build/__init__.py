@@ -2,6 +2,7 @@ import os
 import pathlib
 import subprocess
 
+from build.deps import Deps
 import config
 
 def dir(path):
@@ -32,6 +33,25 @@ def source_dir():
     return result
 
 def run(args):
+def gup_state_path(path):
+    return PurePath(*path.parts[:-1], '.gup', *path.parts[-1:])
+
+# def gup_shadow_path(path):
+#     return PurePath(*path.parts[:-3], 'gup', *path.parts[-3:])
+
+def deps(path):
+    print(f'dpath {path}')
+    build_parent = path.parent
+    shadow = gup_state_path(path)
+    path = PurePath(shadow)
+    parent = path.parent
+
+    deps_file = PurePath(parent, f'deps.{path.name}')
+    print(f'deps file {deps_file}')
+    deps = Deps(deps_file, build_parent)
+    print(f'files {deps.files}')
+    return deps
+
     args = [str(arg) for arg in args]
 
     print(f"run: {args}")
