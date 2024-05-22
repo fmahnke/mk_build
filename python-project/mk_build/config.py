@@ -3,7 +3,7 @@ import os
 from string import Template
 import tomllib
 
-from util import todo
+from mk_build.util import todo
 
 class ConfigFile:
     def __init__(self, name, default_config):

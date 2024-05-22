@@ -2,8 +2,8 @@ import subprocess
 from subprocess import CalledProcessError
 import sys
 
-import config
-from util import eprint
+import mk_build.config as config
+from mk_build.util import eprint
 
 
 def gup(*targets):

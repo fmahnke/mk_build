@@ -4,11 +4,14 @@ from pathlib import PurePath
 import subprocess
 import sys
 
-from build.deps import Deps
-import config
-from gup import gup
+from mk_build.build.deps import Deps
+from mk_build.build.path import path, path_dir, paths
+import mk_build.config as config
+from mk_build.gup import gup
 
-__all__ = ['deps', 'gup', 'output', 'run', 'source_dir', 'target',
+
+__all__ = ['environ', 'gup', 'path', 'paths', 'deps', 'OK', 'output',
+           'path_dir', 'run', 'target', 'source_dir'
            'top_build_dir', 'top_source_dir']
 
 output = sys.argv[1] if len(sys.argv) > 1 else None

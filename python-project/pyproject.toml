@@ -1,5 +1,5 @@
 [project]
-name = "gup_build"
+name = "mk_build"
 version = "0.0.1"
 requires-python = ">=3.10"
 
@@ -22,11 +22,11 @@ test = [
 #mkdash1 = "dashboard.dashboard:main"
 
 [tool.coverage.run]
-source = [ "python_package" ]
+source = [ "mk_build" ]
 
 [tool.mypy]
 explicit_package_bases = true
-packages = [ "python_package", "test" ]
+packages = [ "mk_build", "test" ]
 
 [tool.pytest.ini_options]
 testpaths = [ "test" ]
