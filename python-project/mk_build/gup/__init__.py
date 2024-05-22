@@ -1,12 +1,13 @@
 import subprocess
 from subprocess import CalledProcessError
+import os
 import sys
 
 import mk_build.config as config
 from mk_build.util import eprint
 
 
-def gup(*targets):
+def gup(*targets, env=None, **kwargs):
     args = ["gup", "-u"]
 
     if config.trace:
@@ -24,10 +25,14 @@ def gup(*targets):
 
     args = [str(arg) for arg in args]
     print(f"gup (dry={config.dry_run}): {args}")
+    print(env)
+
+    if env is not None:
+        env = env | os.environ
 
     if not config.dry_run:
         try:
-            result = subprocess.run(args, check=True)
+            result = subprocess.run(args, env=env, check=True, **kwargs)
         except CalledProcessError as e:
             eprint(e)
             # print(f'gup returned {e.returncode}:')
