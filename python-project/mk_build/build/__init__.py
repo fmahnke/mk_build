@@ -4,14 +4,16 @@ from pathlib import PurePath
 import subprocess
 from subprocess import CompletedProcess
 import sys
+from typing import Optional
 
 from mk_build.build.deps import Deps
-from mk_build.build.path import path, path_dir, paths
+from mk_build.build.path import path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
 
 
 __all__ = [
+    'build_dir',
     'environ',
     'gup',
     'path',
@@ -22,6 +24,7 @@ __all__ = [
     'run',
     'target',
     'source_dir',
+    'suffix',
     'top_build_dir',
     'top_source_dir'
 ]
@@ -55,19 +58,26 @@ def top_build_dir():
     return config.builddir
 
 
-def source_dir():
+def source_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
+    """ Return the path of the current source directory, relative to the top
+        level source directory. """
     cwd = os.getcwd()
-    result = pathlib.Path(cwd)
-    result = pathlib.Path(
-        top_source_dir(), result.relative_to(top_build_dir()))
+    source_dir = PurePath(cwd)
+    source_dir = PurePath(
+        top_source_dir(), source_dir.relative_to(top_build_dir()))
 
+    if paths is not None:
+        return [path(source_dir, it) for it in paths]
+    else:
+        return source_dir
+
+
+def build_dir():
+    """ Return the path of the current build directory, relative to the top
+        level build directory. """
+    cwd = os.getcwd()
+    result = pathlib.PurePath(cwd).relative_to(top_build_dir())
     return result
-
-# def build_dir():
-#     cwd = os.getcwd()
-#     result = pathlib.PurePath(cwd).relative_to(top_build_dir())
-#
-#     return result
 
 
 def gup_state_path(path):

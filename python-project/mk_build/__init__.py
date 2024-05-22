@@ -1,7 +1,8 @@
 from mk_build.build import *
-from mk_build.build.path import path, paths
+from mk_build.build.path import path, paths, suffix
 
 __all__ = [
+    'build_dir',
     'deps',
     'environ',
     'gup',
@@ -11,6 +12,7 @@ __all__ = [
     'paths',
     'run',
     'source_dir',
+    'suffix',
     'target',
     'top_build_dir',
     'top_source_dir'
