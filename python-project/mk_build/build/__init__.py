@@ -27,8 +27,6 @@ def dir(path):
 
 
 def environ(key, allow_empty):
-    result = None
-
     if key in os.environ:
         return os.environ[key]
     elif allow_empty:

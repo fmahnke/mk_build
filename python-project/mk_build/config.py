@@ -5,6 +5,7 @@ import tomllib
 
 from mk_build.util import todo
 
+
 class ConfigFile:
     def __init__(self, name, default_config):
         home_dir = os.getenv('HOME')
@@ -35,10 +36,10 @@ class Config:
 
     @classmethod
     def load(cls):
-        default_config_template = ''
+        # default_config_template = ''
 
-        config_file = ConfigFile('config', default_config_template)
-        data = config_file.data
+        # config_file = ConfigFile('config', default_config_template)
+        # data = config_file.data
 
         return cls()
 

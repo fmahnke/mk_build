@@ -1,5 +1,6 @@
 from pathlib import PurePath
 
+
 class Deps:
     def __init__(self, path, build_dir):
         self.build_dir = build_dir
@@ -21,7 +22,8 @@ class Deps:
                 self.files[path.suffix].append(path)
 
     def files_str(self, suffix):
-        return ' '.join([f'{self.build_dir}/{it}' for it in self.files[suffix]])
+        return ' '.join([f'{self.build_dir}/{it}'
+            for it in self.files[suffix]])
 
     def files_list(self, suffix):
         return [f'{self.build_dir}/{it}' for it in self.files[suffix]]
