@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import os
-import subprocess
 import sys
 
 import mk_build
@@ -26,4 +24,4 @@ args = ['nasm', '-f', 'elf32', '-g', '-w+error', '-i', target_source_dir,
 
 result = run(args)
 
-sys.exit(result)
+sys.exit(result.returncode)

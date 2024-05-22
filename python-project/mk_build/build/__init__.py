@@ -2,6 +2,7 @@ import os
 import pathlib
 from pathlib import PurePath
 import subprocess
+from subprocess import CompletedProcess
 import sys
 
 from mk_build.build.deps import Deps
@@ -10,9 +11,20 @@ import mk_build.config as config
 from mk_build.gup import gup
 
 
-__all__ = ['environ', 'gup', 'path', 'paths', 'deps', 'OK', 'output',
-           'path_dir', 'run', 'target', 'source_dir'
-           'top_build_dir', 'top_source_dir']
+__all__ = [
+    'environ',
+    'gup',
+    'path',
+    'paths',
+    'deps',
+    'output',
+    'path_dir',
+    'run',
+    'target',
+    'source_dir',
+    'top_build_dir',
+    'top_source_dir'
+]
 
 output = sys.argv[1] if len(sys.argv) > 1 else None
 target = sys.argv[2] if len(sys.argv) > 2 else None
@@ -79,16 +91,15 @@ def deps(path):
     return deps
 
 
-def run(args, **kwargs):
+def run(args, **kwargs) -> CompletedProcess:
     args = [str(arg) for arg in args]
 
     print(f"run: {args}")
     print(f"run (dry={config.dry_run}): {' '.join(args)}")
 
     if config.dry_run:
-        code = 0
+        result: CompletedProcess = CompletedProcess(args, 0)
     else:
-        result = subprocess.run(args, **kwargs)
-        code = result.returncode
+        result = subprocess.run(args, check=True, **kwargs)
 
-    return code
+    return result
