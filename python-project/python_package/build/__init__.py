@@ -1,9 +1,20 @@
 import os
 import pathlib
+from pathlib import PurePath
 import subprocess
+import sys
 
 from build.deps import Deps
 import config
+
+__all__ = ['deps', 'output', 'run', 'target', 'source_dir',
+    'top_build_dir', 'top_source_dir']
+
+output = sys.argv[1] if len(sys.argv) > 1 else None
+target = sys.argv[2] if len(sys.argv) > 2 else None
+
+print(f'output={output}')
+print(f'target={target}')
 
 def dir(path):
     last_sep = path.rfind('/')
@@ -32,7 +43,12 @@ def source_dir():
 
     return result
 
-def run(args):
+# def build_dir():
+#     cwd = os.getcwd()
+#     result = pathlib.PurePath(cwd).relative_to(top_build_dir())
+#
+#     return result
+
 def gup_state_path(path):
     return PurePath(*path.parts[:-1], '.gup', *path.parts[-1:])
 
@@ -52,6 +68,7 @@ def deps(path):
     print(f'files {deps.files}')
     return deps
 
+def run(args, **kwargs):
     args = [str(arg) for arg in args]
 
     print(f"run: {args}")
@@ -60,7 +77,7 @@ def deps(path):
     if config.dry_run:
         code = 0
     else:
-        result = subprocess.run(args)
+        result = subprocess.run(args, **kwargs)
         code = result.returncode
 
     return code
