@@ -3,6 +3,7 @@ from subprocess import CalledProcessError
 
 import config
 
+
 def gup(*targets):
     args = ["gup", "-u"]
 
@@ -27,7 +28,7 @@ def gup(*targets):
             result = subprocess.run(args, check=True)
         except CalledProcessError as e:
             print(f'gup returned {e.returncode}:')
-            #print(f'stdout: {e.stdout}')
-            #print(f'stderr: {e.stderr}')
+            # print(f'stdout: {e.stdout}')
+            # print(f'stderr: {e.stderr}')
 
             raise Exception()

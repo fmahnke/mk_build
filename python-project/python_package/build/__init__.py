@@ -16,9 +16,11 @@ target = sys.argv[2] if len(sys.argv) > 2 else None
 print(f'output={output}')
 print(f'target={target}')
 
+
 def dir(path):
     last_sep = path.rfind('/')
     return path[:last_sep]
+
 
 def environ(key, allow_empty):
     result = None
@@ -30,16 +32,20 @@ def environ(key, allow_empty):
     else:
         raise Exception()
 
+
 def top_source_dir():
     return os.environ['srcdir']
+
 
 def top_build_dir():
     return config.builddir
 
+
 def source_dir():
     cwd = os.getcwd()
     result = pathlib.Path(cwd)
-    result = pathlib.Path(top_source_dir(), result.relative_to(top_build_dir()))
+    result = pathlib.Path(
+        top_source_dir(), result.relative_to(top_build_dir()))
 
     return result
 
@@ -49,11 +55,13 @@ def source_dir():
 #
 #     return result
 
+
 def gup_state_path(path):
     return PurePath(*path.parts[:-1], '.gup', *path.parts[-1:])
 
 # def gup_shadow_path(path):
 #     return PurePath(*path.parts[:-3], 'gup', *path.parts[-3:])
+
 
 def deps(path):
     print(f'dpath {path}')
@@ -67,6 +75,7 @@ def deps(path):
     deps = Deps(deps_file, build_parent)
     print(f'files {deps.files}')
     return deps
+
 
 def run(args, **kwargs):
     args = [str(arg) for arg in args]
