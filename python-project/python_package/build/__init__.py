@@ -6,9 +6,10 @@ import sys
 
 from build.deps import Deps
 import config
+from gup import gup
 
-__all__ = ['deps', 'output', 'run', 'target', 'source_dir',
-    'top_build_dir', 'top_source_dir']
+__all__ = ['deps', 'gup', 'output', 'run', 'source_dir', 'target',
+           'top_build_dir', 'top_source_dir']
 
 output = sys.argv[1] if len(sys.argv) > 1 else None
 target = sys.argv[2] if len(sys.argv) > 2 else None
