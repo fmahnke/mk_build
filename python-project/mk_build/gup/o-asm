@@ -22,6 +22,8 @@ target_source_dir = path_dir(source)
 args = ['nasm', '-f', 'elf32', '-g', '-w+error', '-i', target_source_dir,
     m_asm_ppflags, '-o', output, source]
 
+gup(source)
+
 result = run(args)
 
 sys.exit(result.returncode)
