@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+from mk_build import *
+
+'''
+Expressing dependencies
+
+gup("arch/i386/all")
+gup("forth/mforth.bin")
+gup("img/iso/mforth.iso")
+'''
+
+'''
+Finding source files
+
+sources = path(top_source_dir(), 'forth.fth')
+gup(sources)
+'''
+
+'''
+Finding other build artifacts
+
+objects = path(top_build_dir(), 'forth/mforth.bin')
+gup(objects)
+'''
+
+'''
+Always return the result. Zero is success.
+'''
+
+sys.exit(0)
