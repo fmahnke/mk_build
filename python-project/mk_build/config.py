@@ -3,6 +3,8 @@ import os
 from string import Template
 import tomllib
 
+import mk_build.log as log
+from mk_build.log import *
 from mk_build.util import todo
 
 
@@ -49,3 +51,5 @@ trace = False
 
 todo('use config file here')
 builddir = '/p/mforth/_build'
+
+log.set_level(INFO)
