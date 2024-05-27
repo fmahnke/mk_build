@@ -37,11 +37,20 @@ print(f'target={target}')
 
 
 def dir(path):
+    """ Return the directory part of path. """
+
     last_sep = path.rfind('/')
     return path[:last_sep]
 
 
 def environ(key, allow_empty):
+    """ Return the value of an environment variable.
+
+    If key names a variable in the environment, return its value. If the named
+    variable does not exist and allow_empty == True, return ''. Otherwise,
+    raise an exception.
+    """
+
     if key in os.environ:
         return os.environ[key]
     elif allow_empty:
@@ -51,16 +60,25 @@ def environ(key, allow_empty):
 
 
 def top_source_dir():
+    """ Return the top level source directory.
+
+    The top level source directory is the value of the environment variable
+    'srcdir'.
+    """
+
     return os.environ['srcdir']
 
 
 def top_build_dir():
+    """ Return the top level build directory. """
+
     return config.builddir
 
 
 def source_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
-    """ Return the path of the current source directory, relative to the top
-        level source directory. """
+    """ Concatenate zero or more paths to the source directory that
+        corresponds to the current build directory. """
+
     cwd = os.getcwd()
     source_dir = PurePath(cwd)
     source_dir = PurePath(
@@ -102,6 +120,8 @@ def deps(path):
 
 
 def run(args, **kwargs) -> CompletedProcess:
+    """ Execute a program in a child process. """
+
     args = [str(arg) for arg in args]
 
     print(f"run: {args}")
