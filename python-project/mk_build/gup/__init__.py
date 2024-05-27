@@ -25,9 +25,9 @@ def gup(*targets, env=None, **kwargs):
 
     args = [str(arg) for arg in args]
     print(f"gup (dry={config.dry_run}): {args}")
-    print(env)
 
     if env is not None:
+        print(f'env {env}')
         env = env | os.environ
 
     if not config.dry_run:
