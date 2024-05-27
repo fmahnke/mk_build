@@ -90,12 +90,16 @@ def source_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
         return source_dir
 
 
-def build_dir():
-    """ Return the path of the current build directory, relative to the top
-        level build directory. """
+def build_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
+    """ Concatenate zero or more paths to the current build directory. """
+
     cwd = os.getcwd()
-    result = pathlib.PurePath(cwd).relative_to(top_build_dir())
-    return result
+    build_dir = pathlib.PurePath(cwd).relative_to(top_build_dir())
+
+    if paths is not None:
+        return [path(build_dir, it) for it in paths]
+    else:
+        return build_dir
 
 
 def gup_state_path(path):
