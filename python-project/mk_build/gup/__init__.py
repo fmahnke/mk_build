@@ -4,6 +4,7 @@ import os
 import sys
 
 import mk_build.config as config
+import mk_build.log as log
 from mk_build.util import eprint
 
 
@@ -24,10 +25,17 @@ def gup(*targets, env=None, **kwargs):
         args += targets
 
     args = [str(arg) for arg in args]
-    print(f"gup (dry={config.dry_run}): {args}")
+
+    if config.dry_run:
+        dry = ' (dry run)'
+    else:
+        dry = ''
+
+    log.info(f"{' '.join(args)}{dry}")
 
     if env is not None:
-        print(f'env {env}')
+        for k, v in env.items():
+            log.info(f'    {k} = {v}')
         env = env | os.environ
 
     if not config.dry_run:

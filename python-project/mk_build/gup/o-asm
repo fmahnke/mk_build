@@ -8,9 +8,6 @@ from mk_build import *
 output = sys.argv[1]
 target = sys.argv[2]
 
-print(f'output={output}')
-print(f'target={target}')
-
 print(f'o-asm  {target}')
 
 m_asm_ppflags = mk_build.environ('M_ASM_PPFLAGS', True)

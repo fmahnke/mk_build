@@ -10,6 +10,7 @@ from mk_build.build.deps import Deps
 from mk_build.build.path import path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
+import mk_build.log as log
 
 
 __all__ = [
@@ -32,8 +33,8 @@ __all__ = [
 output = sys.argv[1] if len(sys.argv) > 1 else None
 target = sys.argv[2] if len(sys.argv) > 2 else None
 
-print(f'output={output}')
-print(f'target={target}')
+log.debug(f'output={output}')
+log.debug(f'target={target}')
 
 
 def dir(path):
@@ -110,16 +111,16 @@ def gup_state_path(path):
 
 
 def deps(path):
-    print(f'dpath {path}')
+    log.debug(f'dpath {path}')
     build_parent = path.parent
     shadow = gup_state_path(path)
     path = PurePath(shadow)
     parent = path.parent
 
     deps_file = PurePath(parent, f'deps.{path.name}')
-    print(f'deps file {deps_file}')
+    log.debug(f'deps file {deps_file}')
     deps = Deps(deps_file, build_parent)
-    print(f'files {deps.files}')
+    log.debug(f'files {deps.files}')
     return deps
 
 
@@ -128,8 +129,12 @@ def run(args, **kwargs) -> CompletedProcess:
 
     args = [str(arg) for arg in args]
 
-    print(f"run: {args}")
-    print(f"run (dry={config.dry_run}): {' '.join(args)}")
+    if config.dry_run:
+        dry = ' (dry run)'
+    else:
+        dry = ''
+
+    log.info(f"run: {' '.join(args)}{dry}")
 
     if config.dry_run:
         result: CompletedProcess = CompletedProcess(args, 0)
