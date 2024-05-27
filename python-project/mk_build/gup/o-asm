@@ -11,9 +11,14 @@ target = sys.argv[2]
 print(f'output={output}')
 print(f'target={target}')
 
-m_asm_ppflags = mk_build.environ('M_ASM_PPFLAGS', True)
-
 print(f'o-asm  {target}')
+
+m_asm_ppflags = mk_build.environ('M_ASM_PPFLAGS', True)
+deps = mk_build.environ('DEPS', True)
+
+if deps != '':
+    deps = deps.split()
+    gup(deps)
 
 source = path(top_source_dir(), path(target).with_suffix('.asm'))
 
