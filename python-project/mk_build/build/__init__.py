@@ -43,7 +43,7 @@ def dir(path):
     return path[:last_sep]
 
 
-def environ(key, allow_empty):
+def environ(key, allow_empty) -> str:
     """ Return the value of an environment variable.
 
     If key names a variable in the environment, return its value. If the named
@@ -102,14 +102,14 @@ def build_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
         return build_dir
 
 
-def gup_state_path(path):
+def gup_state_path(path: PurePath) -> PurePath:
     return PurePath(*path.parts[:-1], '.gup', *path.parts[-1:])
 
 # def gup_shadow_path(path):
 #     return PurePath(*path.parts[:-3], 'gup', *path.parts[-3:])
 
 
-def deps(path):
+def deps(path: PurePath) -> Deps:
     log.debug(f'dpath {path}')
     build_parent = path.parent
     shadow = gup_state_path(path)

@@ -5,5 +5,5 @@ import logging
 __all__ = ['DEBUG', 'INFO', 'WARNING', 'ERROR']
 
 
-def set_level(level):
+def set_level(level) -> None:
     logging.getLogger('root').setLevel(level)

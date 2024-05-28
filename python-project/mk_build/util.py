@@ -3,12 +3,12 @@ import os.path
 import sys
 
 
-def todo(message):
+def todo(message) -> None:
     frame = stack()[1]
     file = os.path.basename(frame.filename)
     line = frame.lineno
     print(f'{file}:{line} TODO {message}')
 
 
-def eprint(*args, **kwargs):
+def eprint(*args, **kwargs) -> None:
     print(*args, file=sys.stderr, **kwargs)

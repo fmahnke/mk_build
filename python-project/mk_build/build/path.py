@@ -23,9 +23,9 @@ def paths(paths) -> list[PurePath]:
     return [PurePath(it) for it in paths]
 
 
-def name(path):
+def name(path) -> PurePath:
     return PurePath(PurePath(path).name)
 
 
-def path_dir(path):
+def path_dir(path: PurePath) -> PurePath:
     return path.parents[0]
