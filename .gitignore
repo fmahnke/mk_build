@@ -1,3 +1,6 @@
 /_*
+/.venv
+/python-project/mk_build.egg-info/
+/result
 .coverage
 .ropeproject
