@@ -1,14 +1,16 @@
-import subprocess
-from subprocess import CalledProcessError
 import os
 import sys
+from typing import Optional
 
 import mk_build.config as config
-import mk_build.log as log
+import mk_build.build.process as process
+from mk_build.build.process import CalledProcessError, CompletedProcess
 from mk_build.util import eprint
 
 
-def gup(*targets, env=None, **kwargs):
+def gup(*targets, **kwargs) -> Optional[CompletedProcess]:
+    """ Execute gup for targets. """
+
     args = ["gup", "-u"]
 
     if config.trace:
@@ -27,20 +29,10 @@ def gup(*targets, env=None, **kwargs):
     args = [str(arg) for arg in args]
 
     if config.dry_run:
-        dry = ' (dry run)'
+        result = None
     else:
-        dry = ''
-
-    log.info(f"{' '.join(args)}{dry}")
-
-    if env is not None:
-        for k, v in env.items():
-            log.info(f'    {k} = {v}')
-        env = env | os.environ
-
-    if not config.dry_run:
         try:
-            result = subprocess.run(args, env=env, check=True, **kwargs)
+            result = process.run(args, **kwargs)
         except CalledProcessError as e:
             eprint(e)
             # print(f'gup returned {e.returncode}:')
@@ -49,4 +41,4 @@ def gup(*targets, env=None, **kwargs):
 
             sys.exit(1)
 
-        return result
+    return result

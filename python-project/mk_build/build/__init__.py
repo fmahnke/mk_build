@@ -1,12 +1,11 @@
 import os
 import pathlib
 from pathlib import PurePath
-import subprocess
-from subprocess import CompletedProcess
 import sys
 from typing import Optional
 
 from mk_build.build.deps import Deps
+from mk_build.build.process import run
 from mk_build.build.path import path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
@@ -122,23 +121,3 @@ def deps(path):
     deps = Deps(deps_file, build_parent)
     log.debug(f'files {deps.files}')
     return deps
-
-
-def run(args, **kwargs) -> CompletedProcess:
-    """ Execute a program in a child process. """
-
-    args = [str(arg) for arg in args]
-
-    if config.dry_run:
-        dry = ' (dry run)'
-    else:
-        dry = ''
-
-    log.info(f"run: {' '.join(args)}{dry}")
-
-    if config.dry_run:
-        result: CompletedProcess = CompletedProcess(args, 0)
-    else:
-        result = subprocess.run(args, check=True, **kwargs)
-
-    return result
