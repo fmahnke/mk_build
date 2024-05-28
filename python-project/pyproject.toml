@@ -16,8 +16,8 @@ test = [
     "pytest"
 ]
 
-#[project.scripts]
-#mkdash = "dashboard.dashboard:main"
+[project.scripts]
+configure = "mk_build.configure:main"
 
 #[project.entry-points."entry"]
 #mkdash1 = "dashboard.dashboard:main"

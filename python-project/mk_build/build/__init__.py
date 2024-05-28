@@ -59,7 +59,7 @@ def environ(key, allow_empty):
         raise Exception()
 
 
-def top_source_dir():
+def top_source_dir() -> str:
     """ Return the top level source directory.
 
     The top level source directory is the value of the environment variable
@@ -69,10 +69,10 @@ def top_source_dir():
     return os.environ['srcdir']
 
 
-def top_build_dir():
+def top_build_dir() -> str:
     """ Return the top level build directory. """
 
-    return config.builddir
+    return config.top_build_dir
 
 
 def source_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
@@ -94,7 +94,7 @@ def build_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
     """ Concatenate zero or more paths to the current build directory. """
 
     cwd = os.getcwd()
-    build_dir = pathlib.PurePath(cwd).relative_to(top_build_dir())
+    build_dir = pathlib.PurePath(cwd).relative_to(config.build_dir)
 
     if paths is not None:
         return [path(build_dir, it) for it in paths]

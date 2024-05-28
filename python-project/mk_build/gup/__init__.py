@@ -1,3 +1,4 @@
+from pathlib import PurePath
 import os
 import sys
 from typing import Optional
@@ -6,6 +7,29 @@ import mk_build.config as config
 import mk_build.build.process as process
 from mk_build.build.process import CalledProcessError, CompletedProcess
 from mk_build.util import eprint
+
+
+def gup_path(path) -> Optional[PurePath]:
+    """ Return the first parent directory of path that contains a directory
+        called \"gup\", or None if it doesn't exist. """
+
+    path_ = path
+    it = None
+
+    while True:
+        path__ = PurePath(path_)
+
+        files = os.listdir(path__)
+
+        if 'gup' in files:
+            it = path__
+
+        if len(path__.parents) == 0:
+            break
+
+        path_ = path__.parents[0]
+
+    return it
 
 
 def gup(*targets, **kwargs) -> Optional[CompletedProcess]:
