@@ -3,9 +3,9 @@ import os
 import sys
 from typing import Optional
 
-import mk_build.config as config
 import mk_build.build.process as process
 from mk_build.build.process import CalledProcessError, CompletedProcess
+from mk_build.config import config
 from mk_build.util import eprint
 
 
@@ -37,24 +37,30 @@ def gup(*targets, **kwargs) -> Optional[CompletedProcess]:
 
     args = ["gup", "-u"]
 
-    if config.trace:
+    if config.verbose > 0:
         args.append('--trace')
+
+    if config.verbose > 1:
+        args.append('--verbose')
+
+    target_list = []
 
     if isinstance(targets, tuple):
         first = targets[0]
 
         if isinstance(first, list):
-            args += first
+            target_list += first
         else:
-            args += targets
+            target_list += targets
     else:
-        args += targets
+        target_list += targets
 
-    args = [str(arg) for arg in args]
-
-    if config.dry_run:
-        result = None
+    if len(target_list) == 0:
+        result: CompletedProcess = CompletedProcess(args, 0)
     else:
+        args += target_list
+        args = [str(arg) for arg in args]
+
         try:
             result = process.run(args, **kwargs)
         except CalledProcessError as e:

@@ -23,8 +23,7 @@ def main() -> int:
         build_dir = os.getcwd()
         log.info(f'Auto-detected build directory: {build_dir}')
 
-    config_file = Config()
-    config_file.init(source_dir, build_dir)
+    config_file = Config(source_dir, build_dir)
     config_file.write('config.toml')
 
     return 0
