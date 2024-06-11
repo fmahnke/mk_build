@@ -75,7 +75,7 @@ def top_build_dir() -> str:
     return config.top_build_dir
 
 
-def source_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
+def source_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
     """ Concatenate zero or more paths to the source directory that
         corresponds to the current build directory. """
 
@@ -90,7 +90,7 @@ def source_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
         return source_dir
 
 
-def build_dir(paths=Optional[list]) -> PurePath | list[PurePath]:
+def build_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
     """ Concatenate zero or more paths to the current build directory. """
 
     cwd = os.getcwd()
