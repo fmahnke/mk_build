@@ -1,5 +1,9 @@
 /_*
 /.venv
+
+# editable install state
+/python-project/build
+
 /python-project/mk_build.egg-info/
 /result
 .coverage
