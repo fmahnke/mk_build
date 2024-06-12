@@ -51,6 +51,8 @@ def environ(key, allow_empty) -> str:
     raise an exception.
     """
 
+    # TODO instead of returning empty value, allow a default value.
+
     if key in os.environ:
         return os.environ[key]
     elif allow_empty:

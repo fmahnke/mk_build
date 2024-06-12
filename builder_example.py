@@ -21,6 +21,12 @@ def main(output, target, env=os.environ) -> int:
     '''
 
     '''
+    Calculating source name using the target name.
+
+    source = path(top_source_dir(), path(target).with_suffix(''))
+    '''
+
+    '''
     Object files from the environment.
 
     objects = env['OBJS']
