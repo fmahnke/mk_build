@@ -1,7 +1,9 @@
 from mk_build.build import *
 from mk_build.build.path import path, paths, suffix
+from mk_build.build.process import CalledProcessError
 import mk_build.build.tools as tools
 from mk_build.gup import bin_o
+from mk_build.util import eprint
 
 __all__ = [
     'build_dir',
@@ -20,6 +22,10 @@ __all__ = [
     'top_source_dir',
     # builders
     'bin_o',
+    # process
+    'CalledProcessError',
     # tools
-    'tools'
+    'tools',
+    # util
+    'eprint'
 ]
