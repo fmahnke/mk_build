@@ -4,8 +4,6 @@ from mk_build import *
 import os
 import sys
 
-import mk_build.build.tools
-
 
 def main(output, target, env=os.environ) -> int:
     print(f'bin  {target}')
