@@ -5,7 +5,7 @@ import sys
 from typing import Optional
 
 from mk_build.build.deps import Deps
-from mk_build.build.process import run
+from mk_build.build.process import run, CompletedProcess
 from mk_build.build.path import path, path_dir, paths, suffix
 import mk_build.config as config
 import mk_build.gup as gup_module
@@ -62,6 +62,13 @@ def environ(key, allow_empty) -> str:
         return ''
     else:
         raise Exception()
+
+
+def exit(result: CompletedProcess | int) -> int:
+    if isinstance(result, CompletedProcess):
+        return result.returncode
+    else:
+        return result
 
 
 def top_source_dir() -> str:

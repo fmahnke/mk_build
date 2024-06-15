@@ -1,4 +1,5 @@
 from mk_build.build import *
+from mk_build.build import exit
 from mk_build.build.path import path, paths, suffix
 from mk_build.build.process import CalledProcessError
 import mk_build.build.tools as tools
@@ -9,6 +10,7 @@ __all__ = [
     'build_dir',
     'deps',
     'environ',
+    'exit',
     'gup',
     'output',
     'path',
