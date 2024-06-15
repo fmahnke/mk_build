@@ -1,4 +1,4 @@
-from pathlib import PurePath
+from pathlib import Path
 from typing import Dict
 
 
@@ -15,7 +15,7 @@ class Deps:
             fields = line.split()
 
             if line.startswith('file'):
-                path = PurePath(fields[-1])
+                path = Path(fields[-1])
 
                 if path.suffix not in self.files:
                     self.files[path.suffix] = []

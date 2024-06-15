@@ -1,8 +1,8 @@
-from pathlib import PurePath
+from pathlib import Path
 
 
-def suffix(paths: PurePath | list[PurePath],
-           new_ext) -> PurePath | list[PurePath]:
+def suffix(paths: Path | list[Path],
+           new_ext) -> Path | list[Path]:
     """ Replace the suffix in path or paths. """
 
     if isinstance(paths, list):
@@ -11,21 +11,21 @@ def suffix(paths: PurePath | list[PurePath],
         return paths.with_suffix(new_ext)
 
 
-def path(*path_segments) -> PurePath:
-    """ Create a PurePath from path_segments. """
+def path(*path_segments) -> Path:
+    """ Create a Path from path_segments. """
 
-    return PurePath(*path_segments)
-
-
-def paths(paths) -> list[PurePath]:
-    """ Convert paths to a list of PurePath. """
-
-    return [PurePath(it) for it in paths]
+    return Path(*path_segments)
 
 
-def name(path) -> PurePath:
-    return PurePath(PurePath(path).name)
+def paths(paths) -> list[Path]:
+    """ Convert paths to a list of Path. """
+
+    return [Path(it) for it in paths]
 
 
-def path_dir(path: PurePath) -> PurePath:
+def name(path) -> Path:
+    return Path(Path(path).name)
+
+
+def path_dir(path: Path) -> Path:
     return path.parents[0]

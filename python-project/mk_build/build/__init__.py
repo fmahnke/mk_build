@@ -1,6 +1,6 @@
 import os
 import pathlib
-from pathlib import PurePath
+from pathlib import Path
 import sys
 from typing import Optional
 
@@ -87,7 +87,7 @@ def top_build_dir() -> str:
     return config.top_build_dir
 
 
-def source_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
+def source_dir(paths: Optional[list] = None) -> Path | list[Path]:
     """ Concatenate zero or more paths to the source directory that
         corresponds to the current build directory. """
 
@@ -97,11 +97,11 @@ def source_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
 
     build_dir_ = build_dir()
 
-    assert isinstance(build_dir_, PurePath)
+    assert isinstance(build_dir_, Path)
 
-    relative_build_dir = PurePath(*build_dir_.parts[1:])
+    relative_build_dir = Path(*build_dir_.parts[1:])
 
-    source_dir = PurePath(top_source_dir(), relative_build_dir)
+    source_dir = Path(top_source_dir(), relative_build_dir)
 
     if paths is not None:
         return [path(source_dir, it) for it in paths]
@@ -109,7 +109,7 @@ def source_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
         return source_dir
 
 
-def build_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
+def build_dir(paths: Optional[list] = None) -> Path | list[Path]:
     """ Concatenate zero or more paths to the current build directory. """
 
     # The gup target argument doesn't reliably show the directory containing
@@ -119,10 +119,10 @@ def build_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
     if gup_module.output is None:
         raise Exception('gup output path is not available')
 
-    build_dir_parts = pathlib.PurePath(gup_module.output).parts
+    build_dir_parts = pathlib.Path(gup_module.output).parts
     gup = build_dir_parts.index('.gup')
-    build_dir = pathlib.PurePath(*build_dir_parts[0:gup])
-    build_dir = PurePath(PurePath(config.top_build_dir).name,
+    build_dir = pathlib.Path(*build_dir_parts[0:gup])
+    build_dir = Path(Path(config.top_build_dir).name,
         build_dir.relative_to(config.top_build_dir))
 
     if paths is not None:
@@ -131,21 +131,21 @@ def build_dir(paths: Optional[list] = None) -> PurePath | list[PurePath]:
         return build_dir
 
 
-def gup_state_path(path: PurePath) -> PurePath:
-    return PurePath(*path.parts[:-1], '.gup', *path.parts[-1:])
+def gup_state_path(path: Path) -> Path:
+    return Path(*path.parts[:-1], '.gup', *path.parts[-1:])
 
 # def gup_shadow_path(path):
-#     return PurePath(*path.parts[:-3], 'gup', *path.parts[-3:])
+#     return Path(*path.parts[:-3], 'gup', *path.parts[-3:])
 
 
-def deps(path: PurePath) -> Deps:
+def deps(path: Path) -> Deps:
     log.debug(f'dpath {path}')
     build_parent = path.parent
     shadow = gup_state_path(path)
-    path = PurePath(shadow)
+    path = Path(shadow)
     parent = path.parent
 
-    deps_file = PurePath(parent, f'deps.{path.name}')
+    deps_file = Path(parent, f'deps.{path.name}')
     log.debug(f'deps file {deps_file}')
     deps = Deps(deps_file, build_parent)
     log.debug(f'files {deps.files}')

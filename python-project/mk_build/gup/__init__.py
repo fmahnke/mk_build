@@ -1,4 +1,4 @@
-from pathlib import PurePath
+from pathlib import Path
 import os
 import sys
 from typing import Optional
@@ -12,7 +12,7 @@ output = sys.argv[1] if len(sys.argv) > 1 else None
 target = sys.argv[2] if len(sys.argv) > 2 else None
 
 
-def gup_path(path) -> Optional[PurePath]:
+def gup_path(path) -> Optional[Path]:
     """ Return the first parent directory of path that contains a directory
         called \"gup\", or None if it doesn't exist. """
 
@@ -20,7 +20,7 @@ def gup_path(path) -> Optional[PurePath]:
     it = None
 
     while True:
-        path__ = PurePath(path_)
+        path__ = Path(path_)
 
         files = os.listdir(path__)
 
