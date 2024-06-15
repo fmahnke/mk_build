@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import os
 from os.path import exists
+import sys
 from typing import Optional
 
 import tomlkit as toml
@@ -112,5 +113,20 @@ if exists(_config_path):
 else:
     config = Config()
 
+if 'srcdir' in os.environ:
+    _top_source_dir: Optional[str] = os.environ['srcdir']
+else:
+    _top_source_dir = None
+
+if 'build_source_dir' in os.environ:
+    build_source_dir: Optional[str] = os.environ['build_source_dir']
+else:
+    build_source_dir = _top_source_dir
+
+if build_source_dir is not None:
+    sys.path.append(build_source_dir + '/gup')
+
+log.debug(f'cwd={os.getcwd()}')
+log.debug(f'top_source_dir={_top_source_dir}')
 log.debug(f'top_build_dir={top_build_dir}')
 log.debug(f'build_dir={build_dir}')
