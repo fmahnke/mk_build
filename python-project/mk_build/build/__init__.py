@@ -1,11 +1,9 @@
 from collections.abc import Sequence
 import os
-from typing import Optional
 
 from mk_build.build.deps import Deps
 from mk_build.build.process import run, CompletedProcess
-from mk_build.build.path import (Path, PathInput, Paths, path, path_dir, paths,
-    suffix)
+from mk_build.build.path import Path, PathInput, path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
 import mk_build.log as log
@@ -76,38 +74,39 @@ def top_build_dir() -> str:
     return config.get().top_build_dir
 
 
-def source_dir(paths: Optional[list] = None) -> Paths:
-    """ Concatenate zero or more paths to the source directory that
-        corresponds to the current build directory. """
+def source_dir() -> Path:
+    """ Return a Path to the current source directory. """
+
+    return config.get().source_dir
+
+
+def source_dir_abs() -> Path:
+    """ Return an absolute Path to the current source directory. """
+
+    return path(top_source_dir(), source_dir())
+
+
+def source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
+    """ Concatenate paths to the source directory that corresponds to the
+        current build directory. """
 
     source_dir = config.get().source_dir
 
-    if paths is not None:
-        return [path(source_dir, it) for it in paths]
-    else:
-        return source_dir
+    return [path(source_dir, it) for it in paths]
 
 
-def source_dir_abs(paths: Optional[Sequence[PathInput]] = None) -> Paths:
-    if paths is not None:
-        return [path(top_source_dir(), source_dir(), it) for it in paths]
-    else:
-        return path(top_source_dir(), source_dir())
+def build_dir() -> Path:
+    """ Return a Path to the current build directory. """
+
+    return config.get().build_dir
 
 
-def build_dir(paths: Optional[list] = None) -> Paths:
-    """ Concatenate zero or more paths to the current build directory. """
-
-    # The gup target argument doesn't reliably show the directory containing
-    # the target. The gup output argument does, in the format
-    # /absolute/path/to/target/.gup/out.<targetname>
+def build_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
+    """ Concatenate paths to the current build directory. """
 
     build_dir = config.get().build_dir
 
-    if paths is not None:
-        return [path(build_dir, it) for it in paths]
-    else:
-        return build_dir
+    return [path(build_dir, it) for it in paths]
 
 
 def gup_state_path(path: Path) -> Path:

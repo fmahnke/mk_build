@@ -5,10 +5,11 @@ from dataclasses import dataclass, field
 import os
 from typing import cast
 
-from mk_build import exit, Target, build_dir, run
+from mk_build import exit, Target, run
 from mk_build.build.path import PathInput
 from mk_build.build.tools import cc
 import mk_build.config as config
+from ..build import build_dir_add
 
 
 @dataclass
@@ -29,7 +30,7 @@ class CCompileAndLink(Target):
 
 
 if __name__ == '__main__':
-    dependencies = build_dir(os.environ['OBJECTS'].split())
+    dependencies = build_dir_add(os.environ['OBJECTS'].split())
 
     builder = CCompileAndLink(dependencies=cast(list, dependencies))
 

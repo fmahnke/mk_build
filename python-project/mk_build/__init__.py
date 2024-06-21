@@ -11,9 +11,9 @@ from mk_build.gup.archive import Archive
 from mk_build.gup.assemble import Assemble
 from mk_build.gup.cc_and_link import CCompileAndLink
 from mk_build.util import eprint
+from .build import build_dir_add, source_dir_add
 
 __all__ = [
-    'build_dir',
     'depends',
     'environ',
     'exit',
@@ -22,7 +22,11 @@ __all__ = [
     'path_dir',
     'paths',
     'run',
+    # paths
+    'build_dir',
+    'build_dir_add',
     'source_dir',
+    'source_dir_add',
     'source_dir_abs',
     'suffix',
     'top_build_dir',
