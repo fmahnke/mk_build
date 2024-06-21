@@ -5,6 +5,7 @@ from typing import Optional
 
 import mk_build.build.process as process
 from mk_build.build.process import CalledProcessError, CompletedProcess
+import mk_build.config
 from mk_build.config import config
 from mk_build.util import eprint
 
@@ -36,6 +37,9 @@ def gup(*targets, env=None, **kwargs) -> Optional[CompletedProcess]:
     """ Execute gup for targets. """
 
     args = ["gup", "-u"]
+
+    if config.verbose == 0:
+        args.append('-q')
 
     if config.verbose > 0:
         args.append('--trace')
