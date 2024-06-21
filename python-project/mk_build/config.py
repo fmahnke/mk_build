@@ -24,6 +24,13 @@ else:
 _config_path = f'{top_build_dir}/config.toml'
 
 
+def top_source_dir_factory():
+    if 'top_source_dir' not in os.environ:
+        return None
+    else:
+        return Path(os.environ['top_source_dir'])
+
+
 def output_factory():
     return Path(sys.argv[1]) if len(sys.argv) > 1 else None
 
@@ -63,7 +70,8 @@ class BaseConfig:
 
 @dataclass
 class Config(BaseConfig):
-    top_source_dir: Optional[str] = None
+    top_source_dir: Optional[Path] = field(
+        default_factory=top_source_dir_factory)
     top_build_dir: Optional[str] = os.environ['top_build_dir']
     source_dir: Optional[Path] = None
     build_dir: Optional[Path] = None

@@ -1,9 +1,11 @@
+from collections.abc import Sequence
 import os
 from typing import Optional
 
 from mk_build.build.deps import Deps
 from mk_build.build.process import run, CompletedProcess
-from mk_build.build.path import Path, Paths, path, path_dir, paths, suffix
+from mk_build.build.path import (Path, PathInput, Paths, path, path_dir, paths,
+    suffix)
 import mk_build.config as config
 from mk_build.gup import gup
 import mk_build.log as log
@@ -65,13 +67,13 @@ def top_source_dir() -> str:
     'srcdir'.
     """
 
-    return os.environ['srcdir']
+    return config.get().top_source_dir
 
 
 def top_build_dir() -> str:
     """ Return the top level build directory. """
 
-    return config.top_build_dir
+    return config.get().top_build_dir
 
 
 def source_dir(paths: Optional[list] = None) -> Paths:
@@ -86,7 +88,7 @@ def source_dir(paths: Optional[list] = None) -> Paths:
         return source_dir
 
 
-def source_dir_abs(paths: Optional[list] = None) -> Paths:
+def source_dir_abs(paths: Optional[Sequence[PathInput]] = None) -> Paths:
     if paths is not None:
         return [path(top_source_dir(), source_dir(), it) for it in paths]
     else:

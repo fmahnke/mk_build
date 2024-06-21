@@ -1,11 +1,11 @@
 from collections.abc import MutableSequence
 from os import PathLike
 from pathlib import Path
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
 PathInput: TypeAlias = Path | PathLike | str
-PathInputs: TypeAlias = Union[PathInput | MutableSequence[PathInput]]
-Paths: TypeAlias = Union[Path | MutableSequence[Path]]
+PathInputs: TypeAlias = PathInput | MutableSequence[PathInput]
+Paths: TypeAlias = Path | MutableSequence[Path]
 
 
 def suffix(paths: Paths, new_ext) -> Paths:
