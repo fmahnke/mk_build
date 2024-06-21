@@ -19,7 +19,7 @@ __all__ = [
     'gup',
     'path',
     'paths',
-    'deps',
+    'depends',
     'output',
     'path_dir',
     'run',
@@ -138,7 +138,7 @@ def gup_state_path(path: Path) -> Path:
 #     return Path(*path.parts[:-3], 'gup', *path.parts[-3:])
 
 
-def deps(path: Path) -> Deps:
+def depends(path: Path) -> Deps:
     log.debug(f'dpath {path}')
     build_parent = path.parent
     shadow = gup_state_path(path)

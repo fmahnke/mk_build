@@ -8,7 +8,7 @@ from mk_build.util import eprint
 
 __all__ = [
     'build_dir',
-    'deps',
+    'depends',
     'environ',
     'exit',
     'gup',
