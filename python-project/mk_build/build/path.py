@@ -4,8 +4,7 @@ from typing import TypeAlias, Union
 Paths: TypeAlias = Union[Path | list[Path]]
 
 
-def suffix(paths: Path | list[Path],
-           new_ext) -> Path | list[Path]:
+def suffix(paths: Paths, new_ext) -> Paths:
     """ Replace the suffix in path or paths. """
 
     if isinstance(paths, list):

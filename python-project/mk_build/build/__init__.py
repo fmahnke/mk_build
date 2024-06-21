@@ -4,7 +4,7 @@ from typing import Optional
 
 from mk_build.build.deps import Deps
 from mk_build.build.process import run, CompletedProcess
-from mk_build.build.path import path, path_dir, paths, suffix
+from mk_build.build.path import Paths, path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
 import mk_build.log as log
@@ -75,7 +75,7 @@ def top_build_dir() -> str:
     return config.top_build_dir
 
 
-def source_dir(paths: Optional[list] = None) -> Path | list[Path]:
+def source_dir(paths: Optional[list] = None) -> Paths:
     """ Concatenate zero or more paths to the source directory that
         corresponds to the current build directory. """
 
@@ -87,14 +87,14 @@ def source_dir(paths: Optional[list] = None) -> Path | list[Path]:
         return source_dir
 
 
-def source_dir_abs(paths: Optional[list] = None) -> Path | list[Path]:
+def source_dir_abs(paths: Optional[list] = None) -> Paths:
     if paths is not None:
         return [path(top_source_dir(), source_dir(), it) for it in paths]
     else:
         return path(top_source_dir(), source_dir())
 
 
-def build_dir(paths: Optional[list] = None) -> Path | list[Path]:
+def build_dir(paths: Optional[list] = None) -> Paths:
     """ Concatenate zero or more paths to the current build directory. """
 
     # The gup target argument doesn't reliably show the directory containing
