@@ -1,4 +1,7 @@
 from pathlib import Path
+from typing import TypeAlias, Union
+
+Paths: TypeAlias = Union[Path | list[Path]]
 
 
 def suffix(paths: Path | list[Path],
