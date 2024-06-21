@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 import os
 
-from mk_build import Paths, Target, build_dir, paths, run
+from mk_build import exit, Paths, Target, build_dir, paths, run
 from mk_build.build.tools import cc
 import mk_build.config as config
 
