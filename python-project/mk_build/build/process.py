@@ -21,7 +21,6 @@ def run(args, env=None, **kwargs) -> CompletedProcess:
 
     exports = [
         'M_ASM_PPFLAGS',
-        'top_build_dir',
         'DEPS'
     ]
 
@@ -29,9 +28,6 @@ def run(args, env=None, **kwargs) -> CompletedProcess:
         env = env | os.environ
     else:
         env = os.environ
-
-    if 'top_build_dir' not in env:
-        env['top_build_dir'] = config.top_build_dir
 
     for k, v in env.items():
         if k in exports:

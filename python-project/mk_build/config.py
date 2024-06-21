@@ -97,10 +97,15 @@ class Config(BaseConfig):
 
 dry_run = False
 
+# If this is the primary build runner, we won't have a top build directory yet.
+# gup will have set the working directory to that of the target, so use this as
+# the top build directory.
+
 if 'top_build_dir' in os.environ:
     top_build_dir = os.environ['top_build_dir']
 else:
     top_build_dir = os.getcwd()
+    os.environ['top_build_dir'] = top_build_dir
 
 build_dir = os.getcwd()
 
