@@ -31,6 +31,13 @@ def top_source_dir_factory():
         return Path(os.environ['top_source_dir'])
 
 
+def top_build_dir_factory():
+    if 'top_build_dir' not in os.environ:
+        return None
+    else:
+        return Path(os.environ['top_build_dir'])
+
+
 def output_factory():
     return Path(sys.argv[1]) if len(sys.argv) > 1 else None
 
@@ -72,7 +79,8 @@ class BaseConfig:
 class Config(BaseConfig):
     top_source_dir: Optional[Path] = field(
         default_factory=top_source_dir_factory)
-    top_build_dir: Optional[str] = os.environ['top_build_dir']
+    top_build_dir: Optional[Path] = field(
+        default_factory=top_build_dir_factory)
     source_dir: Optional[Path] = None
     build_dir: Optional[Path] = None
     output: Optional[Path] = field(default_factory=output_factory)
@@ -87,26 +95,26 @@ class Config(BaseConfig):
 
         super().__init__()
 
-        if os.getcwd() == self.top_build_dir:
-            # indirect gup target (builder found through Gupfile)
+        if self.build_dir is None:
+            if os.getcwd() == self.top_build_dir:
+                # indirect gup target (builder found through Gupfile)
 
-            if self.target is None:
-                self.build_dir = None
-                self.source_dir = None
-            else:
-                self.build_dir = self.target.parent
-                self.source_dir = self.target.parent
-        else:
-            # direct target
-
-            if self.top_build_dir is not None:
-                if Path(self.top_build_dir).is_relative_to(os.getcwd()):
-                    self.build_dir = Path(self.top_build_dir).relative_to(
-                        os.getcwd())
+                if self.target is None:
+                    self.build_dir = None
                 else:
-                    self.build_dir = Path(os.getcwd()).relative_to(
-                        self.top_build_dir)
+                    self.build_dir = self.target.parent
+            else:
+                # direct target
 
+                if self.top_build_dir is not None:
+                    if Path(self.top_build_dir).is_relative_to(os.getcwd()):
+                        self.build_dir = Path(self.top_build_dir).relative_to(
+                            os.getcwd())
+                    elif Path(os.getcwd()).is_relative_to(self.top_build_dir):
+                        self.build_dir = Path(os.getcwd()).relative_to(
+                            self.top_build_dir)
+
+        if self.source_dir is None:
             self.source_dir = self.build_dir
 
     @classmethod
@@ -155,13 +163,13 @@ class Config(BaseConfig):
 dry_run = False
 
 
-def create() -> Config:
+def create(*args, **kwargs) -> Config:
     if exists(_config_path):
         config = Config.from_file(_config_path)
 
         log.set_level(config.log_level)
     else:
-        config = Config()
+        config = Config(*args, **kwargs)
 
     return config
 
@@ -169,9 +177,9 @@ def create() -> Config:
 config = Config()
 
 
-def init():
+def init(*args, **kwargs):
     global config
-    config = create()
+    config = create(*args, **kwargs)
 
 
 init()
