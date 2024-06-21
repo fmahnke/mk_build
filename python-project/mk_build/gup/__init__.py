@@ -5,7 +5,6 @@ from typing import Optional
 
 import mk_build.build.process as process
 from mk_build.build.process import CalledProcessError, CompletedProcess
-import mk_build.config
 from mk_build.config import config
 from mk_build.util import eprint
 

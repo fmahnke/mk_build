@@ -3,6 +3,11 @@ from subprocess import CompletedProcess
 
 from mk_build.build.process import run
 
+if 'AR' in os.environ:
+    ar = os.environ['AR']
+else:
+    ar = 'ar'
+
 if 'ASM' in os.environ:
     asm = os.environ['ASM']
 else:
