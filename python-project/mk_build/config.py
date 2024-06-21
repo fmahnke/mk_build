@@ -129,6 +129,7 @@ else:
 if build_source_dir is not None:
     sys.path.append(build_source_dir + '/gup')
 
+log.debug(f'config {config}')
 log.debug(f'cwd={os.getcwd()}')
 log.debug(f'top_source_dir={_top_source_dir}')
 log.debug(f'top_build_dir={top_build_dir}')
