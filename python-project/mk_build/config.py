@@ -107,8 +107,6 @@ else:
     top_build_dir = os.getcwd()
     os.environ['top_build_dir'] = top_build_dir
 
-build_dir = os.getcwd()
-
 _config_path = f'{top_build_dir}/config.toml'
 
 if exists(_config_path):
@@ -134,4 +132,3 @@ if build_source_dir is not None:
 log.debug(f'cwd={os.getcwd()}')
 log.debug(f'top_source_dir={_top_source_dir}')
 log.debug(f'top_build_dir={top_build_dir}')
-log.debug(f'build_dir={build_dir}')
