@@ -1,10 +1,11 @@
 import os
 import subprocess
-from subprocess import (CalledProcessError,  # noqa: F401
-    CompletedProcess)
+from subprocess import CalledProcessError, CompletedProcess
+import sys
 
 import mk_build.config as config
 import mk_build.log as log
+from mk_build.util import eprint
 
 
 def run(args, env=None, **kwargs) -> CompletedProcess:
@@ -36,6 +37,11 @@ def run(args, env=None, **kwargs) -> CompletedProcess:
     if config.dry_run:
         result: CompletedProcess = CompletedProcess(args, 0)
     else:
-        result = subprocess.run(args, check=True, env=env, **kwargs)
+        try:
+            result = subprocess.run(args, check=True, env=env, **kwargs)
+        except CalledProcessError as e:
+            eprint(e)
+
+            sys.exit(e.returncode)
 
     return result
