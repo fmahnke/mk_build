@@ -22,7 +22,6 @@ configure = "mk_build.configure:main"
 source = [ "mk_build" ]
 
 [tool.mypy]
-explicit_package_bases = true
 packages = [ "mk_build", "test" ]
 
 [tool.pytest.ini_options]
