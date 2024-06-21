@@ -82,16 +82,12 @@ class Config(BaseConfig):
         if os.getcwd() == self.top_build_dir:
             # indirect gup target (builder found through Gupfile)
 
-            if True or 'build_dir' not in os.environ or os.environ['build_dir'] is None:
-                if self.target is None:
-                    self.build_dir = None
-                    self.source_dir = None
-                else:
-                    self.build_dir = self.target.parent
-                    self.source_dir = self.target.parent
+            if self.target is None:
+                self.build_dir = None
+                self.source_dir = None
             else:
-                assert False
-                self.build_dir = os.environ['build_dir']
+                self.build_dir = self.target.parent
+                self.source_dir = self.target.parent
         else:
             # direct target
 
