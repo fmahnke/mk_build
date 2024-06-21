@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import os
 from os.path import exists
 from pathlib import Path
@@ -9,6 +9,27 @@ import tomlkit as toml
 from tomlkit.items import Table
 
 import mk_build.log as log
+
+
+# If this is the primary build runner, we won't have a top build directory yet.
+# gup will have set the working directory to that of the target, so use this as
+# the top build directory.
+
+if 'top_build_dir' in os.environ:
+    top_build_dir = os.environ['top_build_dir']
+else:
+    top_build_dir = os.getcwd()
+    os.environ['top_build_dir'] = top_build_dir
+
+_config_path = f'{top_build_dir}/config.toml'
+
+
+def output_factory():
+    return Path(sys.argv[1]) if len(sys.argv) > 1 else None
+
+
+def target_factory():
+    return Path(sys.argv[2]) if len(sys.argv) > 2 else None
 
 
 class BaseConfig:
@@ -42,10 +63,12 @@ class BaseConfig:
 
 @dataclass
 class Config(BaseConfig):
-    source_dir: Optional[str] = None
-    build_dir: Optional[str] = None
-    output: Optional[Path] = Path(sys.argv[1]) if len(sys.argv) > 1 else None
-    target: Optional[Path] = Path(sys.argv[2]) if len(sys.argv) > 2 else None
+    top_source_dir: Optional[str] = None
+    top_build_dir: Optional[str] = os.environ['top_build_dir']
+    source_dir: Optional[Path] = None
+    build_dir: Optional[Path] = None
+    output: Optional[Path] = field(default_factory=output_factory)
+    target: Optional[Path] = field(default_factory=target_factory)
 
     log_level: str = 'WARNING'
     verbose: int = 0
@@ -55,6 +78,32 @@ class Config(BaseConfig):
         """ Initialize the configuration file with arguments. """
 
         super().__init__()
+
+        if os.getcwd() == self.top_build_dir:
+            # indirect gup target (builder found through Gupfile)
+
+            if True or 'build_dir' not in os.environ or os.environ['build_dir'] is None:
+                if self.target is None:
+                    self.build_dir = None
+                    self.source_dir = None
+                else:
+                    self.build_dir = self.target.parent
+                    self.source_dir = self.target.parent
+            else:
+                assert False
+                self.build_dir = os.environ['build_dir']
+        else:
+            # direct target
+
+            if self.top_build_dir is not None:
+                if Path(self.top_build_dir).is_relative_to(os.getcwd()):
+                    self.build_dir = Path(self.top_build_dir).relative_to(
+                        os.getcwd())
+                else:
+                    self.build_dir = Path(os.getcwd()).relative_to(
+                        self.top_build_dir)
+
+            self.source_dir = self.build_dir
 
     @classmethod
     def from_file(cls, path: str) -> 'Config':
@@ -69,8 +118,8 @@ class Config(BaseConfig):
             build = config['build']
 
             ctx = cls(
-                source_dir=build.get('source_dir'),
-                build_dir=build.get('build_dir'),
+                top_source_dir=build.get('source_dir'),
+                top_build_dir=build.get('build_dir'),
                 log_level=build.get('log_level') or 'WARNING',
                 verbose=build.get('verbose') or 0
             )
@@ -84,10 +133,10 @@ class Config(BaseConfig):
 
         build = toml.table()
 
-        if self.source_dir is not None:
-            build.add('source_dir', self.source_dir)
-        if self.build_dir is not None:
-            build.add('build_dir', self.build_dir)
+        if self.top_source_dir is not None:
+            build.add('source_dir', self.top_source_dir)
+        if self.top_build_dir is not None:
+            build.add('build_dir', self.top_build_dir)
         if self.dry_run is not None:
             build.add('dry_run', self.dry_run)
 
@@ -100,18 +149,6 @@ class Config(BaseConfig):
 
 
 dry_run = False
-
-# If this is the primary build runner, we won't have a top build directory yet.
-# gup will have set the working directory to that of the target, so use this as
-# the top build directory.
-
-if 'top_build_dir' in os.environ:
-    top_build_dir = os.environ['top_build_dir']
-else:
-    top_build_dir = os.getcwd()
-    os.environ['top_build_dir'] = top_build_dir
-
-_config_path = f'{top_build_dir}/config.toml'
 
 
 def create() -> Config:

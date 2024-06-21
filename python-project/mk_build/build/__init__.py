@@ -1,5 +1,4 @@
 import os
-import pathlib
 from pathlib import Path
 from typing import Optional
 
@@ -80,17 +79,7 @@ def source_dir(paths: Optional[list] = None) -> Path | list[Path]:
     """ Concatenate zero or more paths to the source directory that
         corresponds to the current build directory. """
 
-    # top_build_dir = '/top_source_dir/_build'
-    # build_dir = '_build/target'
-    # result = '/top_source_dir/_build/target'
-
-    build_dir_ = build_dir()
-
-    assert isinstance(build_dir_, Path)
-
-    relative_build_dir = Path(*build_dir_.parts[1:])
-
-    source_dir = Path(top_source_dir(), relative_build_dir)
+    source_dir = config.get().source_dir
 
     if paths is not None:
         return [path(source_dir, it) for it in paths]
@@ -112,14 +101,7 @@ def build_dir(paths: Optional[list] = None) -> Path | list[Path]:
     # the target. The gup output argument does, in the format
     # /absolute/path/to/target/.gup/out.<targetname>
 
-    if config.get().output is None:
-        raise Exception('gup output path is not available')
-
-    build_dir_parts = pathlib.Path(config.get().output).parts
-    gup = build_dir_parts.index('.gup')
-    build_dir = pathlib.Path(*build_dir_parts[0:gup])
-    build_dir = Path(Path(config.top_build_dir).name,
-        build_dir.relative_to(config.top_build_dir))
+    build_dir = config.get().build_dir
 
     if paths is not None:
         return [path(build_dir, it) for it in paths]

@@ -32,7 +32,7 @@ def gup_path(path) -> Optional[Path]:
     return it
 
 
-def gup(*targets, **kwargs) -> Optional[CompletedProcess]:
+def gup(*targets, env=None, **kwargs) -> Optional[CompletedProcess]:
     """ Execute gup for targets. """
 
     args = ["gup", "-u"]
@@ -62,7 +62,7 @@ def gup(*targets, **kwargs) -> Optional[CompletedProcess]:
         args = [str(arg) for arg in args]
 
         try:
-            result = process.run(args, **kwargs)
+            result = process.run(args, env=env, **kwargs)
         except CalledProcessError as e:
             eprint(e)
             # print(f'gup returned {e.returncode}:')
