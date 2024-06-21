@@ -1,14 +1,12 @@
 import os
 import pathlib
 from pathlib import Path
-import sys
 from typing import Optional
 
 from mk_build.build.deps import Deps
 from mk_build.build.process import run, CompletedProcess
 from mk_build.build.path import path, path_dir, paths, suffix
 import mk_build.config as config
-import mk_build.gup as gup_module
 from mk_build.gup import gup
 import mk_build.log as log
 
@@ -20,24 +18,14 @@ __all__ = [
     'path',
     'paths',
     'depends',
-    'output',
     'path_dir',
     'run',
-    'target',
     'source_dir',
     'source_dir_abs',
     'suffix',
     'top_build_dir',
     'top_source_dir'
 ]
-
-# TODO expose gup output/target instead of these
-
-output = sys.argv[1] if len(sys.argv) > 1 else None
-target = sys.argv[2] if len(sys.argv) > 2 else None
-
-log.debug(f'output={output}')
-log.debug(f'target={target}')
 
 
 def dir(path):
@@ -124,10 +112,10 @@ def build_dir(paths: Optional[list] = None) -> Path | list[Path]:
     # the target. The gup output argument does, in the format
     # /absolute/path/to/target/.gup/out.<targetname>
 
-    if gup_module.output is None:
+    if config.get().output is None:
         raise Exception('gup output path is not available')
 
-    build_dir_parts = pathlib.Path(gup_module.output).parts
+    build_dir_parts = pathlib.Path(config.get().output).parts
     gup = build_dir_parts.index('.gup')
     build_dir = pathlib.Path(*build_dir_parts[0:gup])
     build_dir = Path(Path(config.top_build_dir).name,

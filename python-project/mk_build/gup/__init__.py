@@ -8,9 +8,6 @@ from mk_build.build.process import CalledProcessError, CompletedProcess
 from mk_build.config import config
 from mk_build.util import eprint
 
-output = sys.argv[1] if len(sys.argv) > 1 else None
-target = sys.argv[2] if len(sys.argv) > 2 else None
-
 
 def gup_path(path) -> Optional[Path]:
     """ Return the first parent directory of path that contains a directory

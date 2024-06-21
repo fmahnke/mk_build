@@ -12,7 +12,6 @@ __all__ = [
     'environ',
     'exit',
     'gup',
-    'output',
     'path',
     'path_dir',
     'paths',
@@ -20,7 +19,6 @@ __all__ = [
     'source_dir',
     'source_dir_abs',
     'suffix',
-    'target',
     'top_build_dir',
     'top_source_dir',
     # builders

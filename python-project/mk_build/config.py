@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import os
 from os.path import exists
+from pathlib import Path
 import sys
 from typing import Optional
 
@@ -43,6 +44,9 @@ class BaseConfig:
 class Config(BaseConfig):
     source_dir: Optional[str] = None
     build_dir: Optional[str] = None
+    output: Optional[Path] = Path(sys.argv[1]) if len(sys.argv) > 1 else None
+    target: Optional[Path] = Path(sys.argv[2]) if len(sys.argv) > 2 else None
+
     log_level: str = 'WARNING'
     verbose: int = 0
     dry_run: Optional[bool] = None

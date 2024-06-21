@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
-from mk_build import *
 import os
 import sys
 
+from mk_build import *
+import mk_build.config as config
 
-def main(output, target, env=os.environ) -> int:
+
+def main(output=config.get().output, target=config.get().target,
+         env=os.environ) -> int:
     print(f'bin  {target}')
 
     m_ldflags = env['M_LDFLAGS']
@@ -46,6 +49,6 @@ def main(output, target, env=os.environ) -> int:
 
 
 if __name__ == '__main__':
-    result = main(output, target)
+    result = main()
 
     sys.exit(result)

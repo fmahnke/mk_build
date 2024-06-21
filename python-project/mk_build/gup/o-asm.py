@@ -5,9 +5,11 @@ import sys
 
 import mk_build
 from mk_build import *
+import mk_build.config as config
 
 
-def main(output, target, env=os.environ) -> int:
+def main(output=config.get().output, target=config.get().target,
+         env=os.environ) -> int:
     print(f'o-asm  {target}')
 
     m_asm_ppflags = mk_build.environ('M_ASM_PPFLAGS', True)
@@ -31,6 +33,6 @@ def main(output, target, env=os.environ) -> int:
 
 
 if __name__ == '__main__':
-    result = main(output, target)
+    result = main()
 
     sys.exit(result)
