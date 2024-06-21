@@ -8,6 +8,7 @@ from mk_build.build.process import CalledProcessError
 import mk_build.build.tools as tools
 from mk_build.gup import bin_o
 from mk_build.gup.archive import Archive
+from mk_build.gup.assemble import Assemble
 from mk_build.gup.cc_and_link import CCompileAndLink
 from mk_build.util import eprint
 
@@ -38,6 +39,7 @@ __all__ = [
     'eprint',
     # targets
     'Archive',
+    'Assemble',
     'CCompileAndLink',
     'Target'
 ]
