@@ -18,6 +18,7 @@ __all__ = [
     'paths',
     'run',
     'source_dir',
+    'source_dir_abs',
     'suffix',
     'target',
     'top_build_dir',

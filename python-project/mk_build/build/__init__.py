@@ -25,6 +25,7 @@ __all__ = [
     'run',
     'target',
     'source_dir',
+    'source_dir_abs',
     'suffix',
     'top_build_dir',
     'top_source_dir'
@@ -107,6 +108,13 @@ def source_dir(paths: Optional[list] = None) -> Path | list[Path]:
         return [path(source_dir, it) for it in paths]
     else:
         return source_dir
+
+
+def source_dir_abs(paths: Optional[list] = None) -> Path | list[Path]:
+    if paths is not None:
+        return [path(top_source_dir(), source_dir(), it) for it in paths]
+    else:
+        return path(top_source_dir(), source_dir())
 
 
 def build_dir(paths: Optional[list] = None) -> Path | list[Path]:
