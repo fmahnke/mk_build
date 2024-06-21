@@ -109,12 +109,33 @@ else:
 
 _config_path = f'{top_build_dir}/config.toml'
 
-if exists(_config_path):
-    config = Config.from_file(_config_path)
 
-    log.set_level(config.log_level)
-else:
-    config = Config()
+def create() -> Config:
+    if exists(_config_path):
+        config = Config.from_file(_config_path)
+
+        log.set_level(config.log_level)
+    else:
+        config = Config()
+
+    return config
+
+
+config = Config()
+
+
+def init():
+    global config
+    config = create()
+
+
+init()
+
+
+def get():
+    global config
+    return config
+
 
 if 'srcdir' in os.environ:
     _top_source_dir: Optional[str] = os.environ['srcdir']
