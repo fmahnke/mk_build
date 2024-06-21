@@ -3,6 +3,11 @@ from subprocess import CompletedProcess
 
 from mk_build.build.process import run
 
+if 'ASM' in os.environ:
+    asm = os.environ['ASM']
+else:
+    asm = 'nasm'
+
 if 'CC' in os.environ:
     cc = os.environ['CC']
 else:
