@@ -2,13 +2,14 @@ import os
 import subprocess
 from subprocess import CalledProcessError, CompletedProcess
 import sys
+from typing import Sequence
 
 import mk_build.config as config
 import mk_build.log as log
 from mk_build.util import eprint
 
 
-def run(args, env=None, **kwargs) -> CompletedProcess:
+def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:
     """ Execute a program in a child process. """
 
     args = [str(arg) for arg in args]

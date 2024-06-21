@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from typing import Optional
+from typing import Optional, Iterable
 
 import mk_build.build.process as process
 from mk_build.build.process import CompletedProcess
@@ -30,7 +30,11 @@ def gup_path(path) -> Optional[Path]:
     return it
 
 
-def gup(*targets, env=None, **kwargs) -> Optional[CompletedProcess]:
+def gup(
+    *targets: (str | Path) | Iterable[str | Path],
+    env=None,
+    **kwargs
+) -> Optional[CompletedProcess]:
     """ Execute gup for targets. """
 
     args = ["gup", "-u"]
@@ -60,7 +64,6 @@ def gup(*targets, env=None, **kwargs) -> Optional[CompletedProcess]:
         result: CompletedProcess = CompletedProcess(args, 0)
     else:
         args += target_list
-        args = [str(arg) for arg in args]
 
         result = process.run(args, env=env, **kwargs)
 
