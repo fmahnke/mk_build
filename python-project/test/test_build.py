@@ -3,7 +3,7 @@ import sys
 
 from mk_build import run
 from mk_build.build import *
-from mk_build.build import build_dir_add, source_dir_add
+from mk_build.build import build_dir_add, source_dir_add, top_source_dir_add
 from mk_build.build.path import *
 import mk_build.config as config_
 
@@ -59,6 +59,7 @@ class TestPath:
         source_dir_str = build_dir_str
 
         assert top_source_dir() == Path(top_source_dir_str)
+        assert top_source_dir_add('0') == [Path(top_source_dir_str, '0')]
 
         assert source_dir() == Path(source_dir_str)
 

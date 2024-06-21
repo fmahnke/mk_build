@@ -11,7 +11,7 @@ from mk_build.gup.archive import Archive
 from mk_build.gup.assemble import Assemble
 from mk_build.gup.cc_and_link import CCompileAndLink
 from mk_build.util import eprint
-from .build import build_dir_add, source_dir_add
+from .build import build_dir_add, source_dir_add, top_source_dir_add
 
 __all__ = [
     'depends',
@@ -31,6 +31,7 @@ __all__ = [
     'suffix',
     'top_build_dir',
     'top_source_dir',
+    'top_source_dir_add',
     'Path',
     'Paths',
     # builders

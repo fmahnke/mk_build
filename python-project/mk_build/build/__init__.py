@@ -68,6 +68,14 @@ def top_source_dir() -> str:
     return config.get().top_source_dir
 
 
+def top_source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
+    """ Concatenate paths to the topsource directory. """
+
+    top_source_dir = config.get().top_source_dir
+
+    return [path(top_source_dir, it) for it in paths]
+
+
 def top_build_dir() -> str:
     """ Return the top level build directory. """
 
