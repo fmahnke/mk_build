@@ -1,8 +1,7 @@
-from pathlib import Path
 import os
 from typing import Optional, Iterable
 
-from mk_build.build.path import PathInput
+from mk_build.build.path import Path, PathInput
 import mk_build.build.process as process
 from mk_build.build.process import CompletedProcess
 from mk_build.config import config

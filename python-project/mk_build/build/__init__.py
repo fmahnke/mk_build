@@ -1,10 +1,9 @@
 import os
-from pathlib import Path
 from typing import Optional
 
 from mk_build.build.deps import Deps
 from mk_build.build.process import run, CompletedProcess
-from mk_build.build.path import Paths, path, path_dir, paths, suffix
+from mk_build.build.path import Path, Paths, path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
 import mk_build.log as log

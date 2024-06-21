@@ -1,5 +1,6 @@
-from pathlib import Path
 from typing import Dict
+
+from .path import Path
 
 
 class Deps:

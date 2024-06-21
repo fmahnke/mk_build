@@ -1,8 +1,8 @@
 import os
-from pathlib import Path
 import sys
 
 from mk_build import run
+from mk_build.build.path import Path
 import mk_build.config as config_
 
 

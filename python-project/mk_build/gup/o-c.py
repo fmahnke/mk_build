@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 from dataclasses import dataclass
-from pathlib import Path
 
 import mk_build
 from mk_build import *
+from mk_build.build.path import Path
 import mk_build.config as config
 
 

@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 import os
 from os.path import exists
-from pathlib import Path
 import sys
 from typing import Optional
 
 import tomlkit as toml
 from tomlkit.items import Table
 
+from mk_build.build.path import Path
 import mk_build.log as log
 
 
