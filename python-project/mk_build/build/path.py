@@ -1,13 +1,17 @@
+from collections.abc import MutableSequence
+from os import PathLike
 from pathlib import Path
 from typing import TypeAlias, Union
 
-Paths: TypeAlias = Union[Path | list[Path]]
+PathInput: TypeAlias = Path | PathLike | str
+PathInputs: TypeAlias = Union[PathInput | MutableSequence[PathInput]]
+Paths: TypeAlias = Union[Path | MutableSequence[Path]]
 
 
 def suffix(paths: Paths, new_ext) -> Paths:
     """ Replace the suffix in path or paths. """
 
-    if isinstance(paths, list):
+    if isinstance(paths, MutableSequence):
         return [it.with_suffix(new_ext) for it in paths]
     else:
         return paths.with_suffix(new_ext)
@@ -19,13 +23,13 @@ def path(*path_segments) -> Path:
     return Path(*path_segments)
 
 
-def paths(paths) -> list[Path]:
+def paths(paths) -> MutableSequence[Path]:
     """ Convert paths to a list of Path. """
 
     return [Path(it) for it in paths]
 
 
-def name(path) -> Path:
+def name(path: PathInput) -> Path:
     return Path(Path(path).name)
 
 

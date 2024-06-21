@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 
+from collections.abc import MutableSequence
 from dataclasses import dataclass, field
 import os
+from typing import cast
 
-from mk_build import exit, Paths, Target, build_dir, paths, run
+from mk_build import exit, Target, build_dir, run
+from mk_build.build.path import PathInput
 from mk_build.build.tools import cc
 import mk_build.config as config
 
 
 @dataclass
 class CCompileAndLink(Target):
-    libraries: Paths = field(default_factory=list)
+    libraries: MutableSequence[PathInput] = field(default_factory=list)
 
     def update(self):
         super().update()
@@ -26,9 +29,9 @@ class CCompileAndLink(Target):
 
 
 if __name__ == '__main__':
-    dependencies = paths(build_dir(os.environ['OBJECTS'].split()))
+    dependencies = build_dir(os.environ['OBJECTS'].split())
 
-    builder = CCompileAndLink(dependencies=dependencies)
+    builder = CCompileAndLink(dependencies=cast(list, dependencies))
 
     result = builder.update()
 
