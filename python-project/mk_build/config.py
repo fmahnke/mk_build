@@ -13,19 +13,6 @@ from .message import build_dir_error
 from .validate import ensure_type
 
 
-# If this is the primary build runner, we won't have a top build directory yet.
-# gup will have set the working directory to that of the target, so use this as
-# the top build directory.
-
-if 'top_build_dir' in os.environ:
-    top_build_dir = os.environ['top_build_dir']
-else:
-    top_build_dir = os.getcwd()
-    os.environ['top_build_dir'] = top_build_dir
-
-_config_path = f'{top_build_dir}/config.toml'
-
-
 class BaseConfig:
     """ Build configuration file. """
 
@@ -246,8 +233,21 @@ class Config(BaseConfig):
 
 
 def _create(*args, **kwargs) -> Config:
-    if exists(_config_path):
-        config = Config.from_file(_config_path)
+    # If this is the primary build runner, we don't know the top build
+    # directory yet. Prioritize setting it via environment variable. Otherwise,
+    # gup will have set the working directory to that of the target, so use
+    # that.
+
+    if 'top_build_dir' in os.environ:
+        top_build_dir = os.environ['top_build_dir']
+    else:
+        top_build_dir = os.getcwd()
+        os.environ['top_build_dir'] = top_build_dir
+
+    config_path = f'{top_build_dir}/config.toml'
+
+    if exists(config_path):
+        config = Config.from_file(config_path)
 
         log.set_level(config.log_level)
     else:
