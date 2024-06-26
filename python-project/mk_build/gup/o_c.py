@@ -13,10 +13,10 @@ class ObjectFromC(Target):
     def update(self):
         super().update()
 
-        ppflags = mk_build.environ('M_C_PPFLAGS', True).split()
+        ppflags = mk_build.environ('M_C_PPFLAGS', '').split()
         ppflags.append(f'-I{Path(top_source_dir(), source_dir())}')
-        flags = mk_build.environ('M_C_FLAGS', True).split()
-        deps = mk_build.environ('DEPS', True)
+        flags = mk_build.environ('M_C_FLAGS', '').split()
+        deps = mk_build.environ('DEPS', '')
 
         if deps != '':
             gup(deps.split())
