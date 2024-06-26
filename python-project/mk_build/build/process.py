@@ -6,7 +6,7 @@ from typing import Sequence
 
 import mk_build.config as config
 import mk_build.log as log
-from mk_build.util import eprint
+from mk_build.util.io import eprint
 
 
 def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:

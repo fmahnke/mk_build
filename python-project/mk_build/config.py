@@ -62,10 +62,10 @@ class BaseConfig:
 
         return ctx
 
-    def write(self, path: str) -> None:
+    def write(self, path: str, mode='w') -> None:
         """ Write the configuration to a file. """
 
-        with open(path, 'w') as fi:
+        with open(path, mode) as fi:
             fi.write(toml.dumps(self.config))
 
     def __getitem__(self, key):
@@ -138,7 +138,7 @@ class Config(BaseConfig):
 
         return ctx
 
-    def write(self, path: str) -> None:
+    def write(self, path: str, mode=None) -> None:
         """ Write the configuration to a file. """
 
         self.config = toml.document()
@@ -157,7 +157,10 @@ class Config(BaseConfig):
 
         self.config.add('build', build)
 
-        super().write(path)
+        if mode is None:
+            mode = 'w'
+
+        super().write(path, mode)
 
 
 dry_run = False
