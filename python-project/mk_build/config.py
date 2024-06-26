@@ -7,10 +7,11 @@ from typing import Optional
 import tomlkit as toml
 from tomlkit.items import Table
 
-from mk_build.build.path import Path
-from mk_build.util import cwd, environ
-from mk_build.message import build_dir_error
 import mk_build.log as log
+
+from .build.path import Path
+from .util import cwd, environ
+from .message import build_dir_error
 from .validate import ensure_type
 
 
