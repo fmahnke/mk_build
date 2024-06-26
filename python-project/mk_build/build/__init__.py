@@ -1,5 +1,4 @@
 from collections.abc import Sequence
-import os
 
 from mk_build.build.deps import Deps
 from mk_build.build.process import run, CompletedProcess
@@ -11,7 +10,6 @@ import mk_build.log as log
 
 __all__ = [
     'build_dir',
-    'environ',
     'gup',
     'path',
     'paths',
@@ -31,24 +29,6 @@ def dir(path):
 
     last_sep = path.rfind('/')
     return path[:last_sep]
-
-
-def environ(key, allow_empty) -> str:
-    """ Return the value of an environment variable.
-
-    If key names a variable in the environment, return its value. If the named
-    variable does not exist and allow_empty == True, return ''. Otherwise,
-    raise an exception.
-    """
-
-    # TODO instead of returning empty value, allow a default value.
-
-    if key in os.environ:
-        return os.environ[key]
-    elif allow_empty:
-        return ''
-    else:
-        raise Exception()
 
 
 def exit(result: CompletedProcess | int) -> int:

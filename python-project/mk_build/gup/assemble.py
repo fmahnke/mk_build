@@ -13,10 +13,10 @@ class Assemble(Target):
     def update(self):
         super().update()
 
-        m_asm_ppflags = environ('M_ASM_PPFLAGS', True).split()
+        m_asm_ppflags = environ('M_ASM_PPFLAGS', '').split()
         m_asm_ppflags.append(f'-I{source_dir_abs()}')
 
-        deps = environ('DEPS', True)
+        deps = environ('DEPS', '')
 
         if deps != '':
             gup(deps.split())

@@ -10,6 +10,7 @@ from mk_build.gup import bin_o
 from mk_build.gup.archive import Archive
 from mk_build.gup.assemble import Assemble
 from mk_build.gup.cc_and_link import CCompileAndLink
+from mk_build.util import environ
 from mk_build.util.io import eprint
 from .build import build_dir_add, source_dir_add, top_source_dir_add
 
