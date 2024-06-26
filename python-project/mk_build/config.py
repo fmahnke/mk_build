@@ -1,4 +1,3 @@
-from dataclasses import dataclass, field
 import os
 from os.path import exists
 import sys
@@ -26,14 +25,6 @@ else:
     os.environ['top_build_dir'] = top_build_dir
 
 _config_path = f'{top_build_dir}/config.toml'
-
-
-def output_factory():
-    return Path(sys.argv[1]) if len(sys.argv) > 1 else None
-
-
-def target_factory():
-    return Path(sys.argv[2]) if len(sys.argv) > 2 else None
 
 
 class BaseConfig:
@@ -65,14 +56,43 @@ class BaseConfig:
         self.config[key] = value
 
 
-@dataclass
 class Config(BaseConfig):
-    output: Optional[Path] = field(default_factory=output_factory)
-    target: Optional[Path] = field(default_factory=target_factory)
+    def __init__(
+        self,
+        log_level: str = 'WARNING',
+        verbose: int = 0,
+        dry_run: Optional[bool] = None,
+        *args,
+        **kwargs
+    ) -> None:
+        """ Initialize the configuration file with arguments. """
 
-    log_level: str = 'WARNING'
-    verbose: int = 0
-    dry_run: Optional[bool] = None
+        self.log_level = log_level
+        self.verbose = verbose
+        self.dry_run = dry_run
+
+        super().__init__(*args, **kwargs)
+
+        self._top_source_dir: Optional[Path] = None
+        self._top_build_dir: Optional[Path] = None
+
+        if 'top_source_dir' in kwargs:
+            self.top_source_dir = kwargs['top_source_dir']
+        else:
+            self.top_source_dir = None
+
+        if 'top_build_dir' in kwargs:
+            self.top_build_dir = kwargs['top_build_dir']
+        else:
+            self.top_build_dir = None
+
+    @property
+    def output(self) -> Optional[Path]:
+        return Path(sys.argv[1]) if len(sys.argv) > 1 else None
+
+    @property
+    def target(self) -> Optional[Path]:
+        return Path(sys.argv[2]) if len(sys.argv) > 2 else None
 
     @property
     def top_source_dir(self) -> Optional[Path]:
@@ -90,7 +110,7 @@ class Config(BaseConfig):
         else:
             result = Path(val)
 
-        self._top_source_dir: Optional[Path] = result
+        self._top_source_dir = result
 
     @property
     def top_build_dir(self) -> Optional[Path]:
@@ -108,7 +128,7 @@ class Config(BaseConfig):
         else:
             result = Path(val)
 
-        self._top_build_dir: Optional[Path] = result
+        self._top_build_dir = result
 
     @property
     def source_dir(self) -> Optional[Path]:
@@ -148,24 +168,6 @@ class Config(BaseConfig):
                     ))
 
         return build_dir
-
-    def __post_init__(self, *args, **kwargs) -> None:
-        """ Initialize the configuration file with arguments. """
-
-        super().__init__(*args, **kwargs)
-
-        self._top_source_dir = None
-        self._top_build_dir = None
-
-        if 'top_source_dir' in kwargs:
-            self.top_source_dir = kwargs['top_source_dir']
-        else:
-            self.top_source_dir = None
-
-        if 'top_build_dir' in kwargs:
-            self.top_build_dir = kwargs['top_build_dir']
-        else:
-            self.top_build_dir = None
 
     @classmethod
     def from_file(cls, path: str) -> 'Config':
