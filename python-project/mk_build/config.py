@@ -8,7 +8,10 @@ import tomlkit as toml
 from tomlkit.items import Table
 
 from mk_build.build.path import Path
+from mk_build.util import cwd, environ
+from mk_build.message import build_dir_error
 import mk_build.log as log
+from .validate import ensure_type
 
 
 # If this is the primary build runner, we won't have a top build directory yet.
@@ -22,20 +25,6 @@ else:
     os.environ['top_build_dir'] = top_build_dir
 
 _config_path = f'{top_build_dir}/config.toml'
-
-
-def top_source_dir_factory():
-    if 'top_source_dir' not in os.environ:
-        return None
-    else:
-        return Path(os.environ['top_source_dir'])
-
-
-def top_build_dir_factory():
-    if 'top_build_dir' not in os.environ:
-        return None
-    else:
-        return Path(os.environ['top_build_dir'])
 
 
 def output_factory():
@@ -77,12 +66,6 @@ class BaseConfig:
 
 @dataclass
 class Config(BaseConfig):
-    top_source_dir: Optional[Path] = field(
-        default_factory=top_source_dir_factory)
-    top_build_dir: Optional[Path] = field(
-        default_factory=top_build_dir_factory)
-    source_dir: Optional[Path] = None
-    build_dir: Optional[Path] = None
     output: Optional[Path] = field(default_factory=output_factory)
     target: Optional[Path] = field(default_factory=target_factory)
 
@@ -90,32 +73,98 @@ class Config(BaseConfig):
     verbose: int = 0
     dry_run: Optional[bool] = None
 
-    def __post_init__(self) -> None:
+    @property
+    def top_source_dir(self) -> Optional[Path]:
+        if self._top_source_dir is not None:
+            return self._top_source_dir
+        elif 'top_source_dir' not in os.environ:
+            return None
+        else:
+            return Path(environ('top_source_dir', required=True))
+
+    @top_source_dir.setter
+    def top_source_dir(self, val: Optional[Path]) -> None:
+        if val is None:
+            result = None
+        else:
+            result = Path(val)
+
+        self._top_source_dir: Optional[Path] = result
+
+    @property
+    def top_build_dir(self) -> Optional[Path]:
+        if self._top_build_dir is not None:
+            return self._top_build_dir
+        elif 'top_build_dir' not in os.environ:
+            return None
+        else:
+            return Path(environ('top_build_dir', required=True))
+
+    @top_build_dir.setter
+    def top_build_dir(self, val: Optional[Path]) -> None:
+        if val is None:
+            result = None
+        else:
+            result = Path(val)
+
+        self._top_build_dir: Optional[Path] = result
+
+    @property
+    def source_dir(self) -> Optional[Path]:
+        build_dir = self.build_dir
+
+        if self.top_source_dir is None or build_dir is None:
+            return None
+        elif self.top_source_dir.is_relative_to(build_dir):
+            return self.top_source_dir.relative_to(build_dir)
+        else:
+            return build_dir
+
+    @property
+    def build_dir(self) -> Optional[Path]:
+        build_dir = None
+
+        if cwd() == self.top_build_dir:
+            # indirect gup target (builder found through Gupfile)
+
+            if self.target is None:
+                build_dir = None
+            else:
+                build_dir = self.target.parent
+        else:
+            # direct target
+
+            if self.top_build_dir is not None:
+                if Path(self.top_build_dir).is_relative_to(os.getcwd()):
+                    build_dir = Path(self.top_build_dir).relative_to(
+                        os.getcwd())
+                elif Path(os.getcwd()).is_relative_to(self.top_build_dir):
+                    build_dir = Path(os.getcwd()).relative_to(
+                        self.top_build_dir)
+                else:
+                    raise AssertionError(str.format(
+                        build_dir_error, os.getcwd(), self.top_build_dir
+                    ))
+
+        return build_dir
+
+    def __post_init__(self, *args, **kwargs) -> None:
         """ Initialize the configuration file with arguments. """
 
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
-        if self.build_dir is None:
-            if os.getcwd() == self.top_build_dir:
-                # indirect gup target (builder found through Gupfile)
+        self._top_source_dir = None
+        self._top_build_dir = None
 
-                if self.target is None:
-                    self.build_dir = None
-                else:
-                    self.build_dir = self.target.parent
-            else:
-                # direct target
+        if 'top_source_dir' in kwargs:
+            self.top_source_dir = kwargs['top_source_dir']
+        else:
+            self.top_source_dir = None
 
-                if self.top_build_dir is not None:
-                    if Path(self.top_build_dir).is_relative_to(os.getcwd()):
-                        self.build_dir = Path(self.top_build_dir).relative_to(
-                            os.getcwd())
-                    elif Path(os.getcwd()).is_relative_to(self.top_build_dir):
-                        self.build_dir = Path(os.getcwd()).relative_to(
-                            self.top_build_dir)
-
-        if self.source_dir is None:
-            self.source_dir = self.build_dir
+        if 'top_build_dir' in kwargs:
+            self.top_build_dir = kwargs['top_build_dir']
+        else:
+            self.top_build_dir = None
 
     @classmethod
     def from_file(cls, path: str) -> 'Config':
@@ -129,12 +178,19 @@ class Config(BaseConfig):
         else:
             build = config['build']
 
-            ctx = cls(
-                top_source_dir=build.get('source_dir'),
-                top_build_dir=build.get('build_dir'),
+            ctx: 'Config' = Config(
                 log_level=build.get('log_level') or 'WARNING',
                 verbose=build.get('verbose') or 0
             )
+
+            top_source_dir = build.get('source_dir')
+            top_build_dir = build.get('build_dir')
+
+            if ensure_type(top_source_dir, str):
+                ctx.top_source_dir = Path(top_source_dir)
+
+            if ensure_type(top_build_dir, str):
+                ctx.top_build_dir = Path(top_build_dir)
 
         return ctx
 
@@ -146,9 +202,9 @@ class Config(BaseConfig):
         build = toml.table()
 
         if self.top_source_dir is not None:
-            build.add('source_dir', self.top_source_dir)
+            build.add('source_dir', str(self.top_source_dir))
         if self.top_build_dir is not None:
-            build.add('build_dir', self.top_build_dir)
+            build.add('build_dir', str(self.top_build_dir))
         if self.dry_run is not None:
             build.add('dry_run', self.dry_run)
 
@@ -161,6 +217,12 @@ class Config(BaseConfig):
             mode = 'w'
 
         super().write(path, mode)
+
+    def __str__(self) -> str:
+        return (f'Config(top_source_dir={self.top_source_dir}'
+            f', top_build_dir={self.top_build_dir}'
+            f', source_dir={self.source_dir}'
+            f', build_dir={self.build_dir})')
 
 
 dry_run = False

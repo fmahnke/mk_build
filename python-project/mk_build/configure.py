@@ -16,14 +16,17 @@ def main() -> int:
     else:
         source_dir = str(gup_path(os.getcwd()))
         log.info(f'Auto-detected source directory: {source_dir}')
+        os.environ['source_dir'] = source_dir
 
     if 'build_dir' in os.environ:
         build_dir = os.environ['build_dir']
     else:
         build_dir = os.getcwd()
         log.info(f'Auto-detected build directory: {build_dir}')
+        os.environ['build_dir'] = build_dir
 
-    config_file = Config(source_dir, build_dir)
+    config_file = Config()
+
     config_file.write('config.toml')
 
     return 0
