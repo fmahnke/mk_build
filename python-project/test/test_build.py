@@ -39,11 +39,6 @@ class TestConfig:
         os.environ['top_source_dir'] = str(self.top_source_dir)
         os.environ['top_build_dir'] = str(self.top_build_dir)
 
-        config_.init()
-        self.config = config_.get()
-
-        print(f'change to {self.config.top_build_dir}')
-
         chdir(self.config.top_build_dir)
 
     def test_dirs(self) -> None:

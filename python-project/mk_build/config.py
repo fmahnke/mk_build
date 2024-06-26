@@ -6,8 +6,7 @@ from typing import Optional
 import tomlkit as toml
 from tomlkit.items import Table
 
-import mk_build.log as log
-
+from . import log
 from .build.path import Path
 from .util import cwd, environ
 from .message import build_dir_error
@@ -59,6 +58,8 @@ class BaseConfig:
 class Config(BaseConfig):
     def __init__(
         self,
+        top_source_dir: Optional[Path] = None,
+        top_build_dir: Optional[Path] = None,
         log_level: str = 'WARNING',
         verbose: int = 0,
         dry_run: Optional[bool] = None,
@@ -67,24 +68,34 @@ class Config(BaseConfig):
     ) -> None:
         """ Initialize the configuration file with arguments. """
 
+        super().__init__(*args, **kwargs)
+
+        self._top_source_dir = None
+        self._top_build_dir = None
+
         self.log_level = log_level
         self.verbose = verbose
         self.dry_run = dry_run
 
-        super().__init__(*args, **kwargs)
+        self.top_source_dir = top_source_dir
+        self.top_build_dir = top_build_dir
 
-        self._top_source_dir: Optional[Path] = None
-        self._top_build_dir: Optional[Path] = None
-
-        if 'top_source_dir' in kwargs:
-            self.top_source_dir = kwargs['top_source_dir']
+        '''
+        if 'build_source_dir' in os.environ:
+            build_source_dir: Optional[str] = os.environ['build_source_dir']
+        elif top_source_dir is not None:
+            build_source_dir = str(top_source_dir)
         else:
-            self.top_source_dir = None
+            build_source_dir = None
 
-        if 'top_build_dir' in kwargs:
-            self.top_build_dir = kwargs['top_build_dir']
-        else:
-            self.top_build_dir = None
+        if build_source_dir is not None:
+            gup_path = f'{build_source_dir}/gup'
+
+            if gup_path not in sys.path:
+                sys.path.append(gup_path)
+
+        print(sys.path)
+        '''
 
     @property
     def output(self) -> Optional[Path]:
@@ -181,19 +192,25 @@ class Config(BaseConfig):
         else:
             build = config['build']
 
-            ctx: 'Config' = Config(
-                log_level=build.get('log_level') or 'WARNING',
-                verbose=build.get('verbose') or 0
-            )
-
             top_source_dir = build.get('source_dir')
             top_build_dir = build.get('build_dir')
 
             if ensure_type(top_source_dir, str):
-                ctx.top_source_dir = Path(top_source_dir)
+                top_source_dir = Path(top_source_dir)
+            else:
+                top_source_dir = None
 
             if ensure_type(top_build_dir, str):
-                ctx.top_build_dir = Path(top_build_dir)
+                top_build_dir = Path(top_build_dir)
+            else:
+                top_build_dir = None
+
+            ctx: 'Config' = Config(
+                top_source_dir,
+                top_build_dir,
+                log_level=build.get('log_level') or 'WARNING',
+                verbose=build.get('verbose') or 0
+            )
 
         return ctx
 
@@ -228,10 +245,7 @@ class Config(BaseConfig):
             f', build_dir={self.build_dir})')
 
 
-dry_run = False
-
-
-def create(*args, **kwargs) -> Config:
+def _create(*args, **kwargs) -> Config:
     if exists(_config_path):
         config = Config.from_file(_config_path)
 
@@ -242,36 +256,8 @@ def create(*args, **kwargs) -> Config:
     return config
 
 
-config = Config()
-
-
-def init(*args, **kwargs):
-    global config
-    config = create(*args, **kwargs)
-
-
-init()
+config = _create()
 
 
 def get():
-    global config
     return config
-
-
-if 'srcdir' in os.environ:
-    _top_source_dir: Optional[str] = os.environ['srcdir']
-else:
-    _top_source_dir = None
-
-if 'build_source_dir' in os.environ:
-    build_source_dir: Optional[str] = os.environ['build_source_dir']
-else:
-    build_source_dir = _top_source_dir
-
-if build_source_dir is not None:
-    sys.path.append(build_source_dir + '/gup')
-
-log.debug(f'config {config}')
-log.debug(f'cwd={os.getcwd()}')
-log.debug(f'top_source_dir={_top_source_dir}')
-log.debug(f'top_build_dir={top_build_dir}')

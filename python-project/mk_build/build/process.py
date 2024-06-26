@@ -4,9 +4,11 @@ from subprocess import CalledProcessError, CompletedProcess
 import sys
 from typing import Sequence
 
-import mk_build.config as config
+import mk_build.config as __config
 import mk_build.log as log
 from mk_build.util.io import eprint
+
+_config = __config.get()
 
 
 def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:
@@ -14,7 +16,7 @@ def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:
 
     args = [str(arg) for arg in args]
 
-    if config.dry_run:
+    if _config.dry_run:
         dry = ' (dry run)'
     else:
         dry = ''
@@ -35,7 +37,7 @@ def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:
         if k in exports:
             log.debug(f'    {k} = {v}')
 
-    if config.dry_run:
+    if _config.dry_run:
         result: CompletedProcess = CompletedProcess(args, 0)
     else:
         try:
