@@ -1,6 +1,17 @@
 import os.path
 import platform
 
+from ..build.path import Path, PathInput
+
+
+def cwd() -> Path:
+    return Path(os.getcwd())
+
+
+def chdir(path: PathInput) -> None:
+    os.chdir(str(path))
+
+
 def environ(key, default=None, required=True) -> str:
     """ Return the value of an environment variable.
 
