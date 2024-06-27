@@ -241,7 +241,7 @@ class Config(BaseConfig):
             f', build_dir={self.build_dir})')
 
 
-def _create(*args, **kwargs) -> Config:
+def _set_top_build_dir() -> Path:
     # If this is the primary build runner, we don't know the top build
     # directory yet. Prioritize setting it via environment variable. Otherwise,
     # gup will have set the working directory to that of the target, so use
@@ -249,9 +249,19 @@ def _create(*args, **kwargs) -> Config:
 
     if 'top_build_dir' in os.environ:
         top_build_dir = os.environ['top_build_dir']
+
+        log.info(f'top_build_directory from environment: {top_build_dir}')
     else:
         top_build_dir = os.getcwd()
         os.environ['top_build_dir'] = top_build_dir
+
+        log.info(f'Auto-detected build directory: {top_build_dir}')
+
+    return Path(top_build_dir)
+
+
+def _create(*args, **kwargs) -> Config:
+    top_build_dir = _set_top_build_dir()
 
     config_path = f'{top_build_dir}/config.toml'
 
