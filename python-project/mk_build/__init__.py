@@ -3,7 +3,7 @@ from pathlib import Path
 from mk_build.build import *
 from mk_build.build import exit
 from mk_build.build.target import Target
-from mk_build.build.path import Paths, path, paths, suffix
+from mk_build.build.path import PathInput, Paths, path, paths, suffix
 from mk_build.build.process import CalledProcessError, CompletedProcess
 import mk_build.build.tools as tools
 from mk_build.gup import bin_o
@@ -34,6 +34,7 @@ __all__ = [
     'top_source_dir',
     'top_source_dir_add',
     'Path',
+    'PathInput',
     'Paths',
     # builders
     'bin_o',
