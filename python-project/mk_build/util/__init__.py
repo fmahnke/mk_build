@@ -1,5 +1,6 @@
 import os.path
 import platform
+from typing import Optional
 
 from ..build.path import Path, PathInput
 
@@ -10,6 +11,13 @@ def cwd() -> Path:
 
 def chdir(path: PathInput) -> None:
     os.chdir(str(path))
+
+
+def isdir(path: Optional[PathInput]) -> bool:
+    if path is None:
+        return False
+    else:
+        return os.path.isdir(path)
 
 
 def environ(key, default=None, required=True) -> str:
