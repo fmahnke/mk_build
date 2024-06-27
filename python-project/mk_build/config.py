@@ -4,6 +4,7 @@ import sys
 from typing import Optional
 
 import tomlkit as toml
+from tomlkit import TOMLDocument
 from tomlkit.items import Table
 
 from . import log
@@ -16,24 +17,32 @@ from .validate import ensure_type
 class BaseConfig:
     """ Build configuration file. """
 
-    def init_from_file(self, path: str) -> None:
-        with open(path, 'r') as fi:
-            self.config = toml.parse(fi.read())
-
     @classmethod
     def from_file(cls, path: str) -> 'BaseConfig':
         """ Parse the configuration from an existing file. """
 
         ctx = cls()
-        ctx.init_from_file(path)
+        ctx._init_from_file(path)
 
         return ctx
+
+    def toml(self) -> TOMLDocument:
+        return self.config
 
     def write(self, path: str, mode='w') -> None:
         """ Write the configuration to a file. """
 
+        config_toml = self.toml()
+
         with open(path, mode) as fi:
-            fi.write(toml.dumps(self.config))
+            if mode == 'a':
+                fi.write('\n')
+
+            fi.write(toml.dumps(config_toml))
+
+    def _init_from_file(self, path: str) -> None:
+        with open(path, 'r') as fi:
+            self.config = toml.parse(fi.read())
 
     def __getitem__(self, key):
         return self.config[key]
