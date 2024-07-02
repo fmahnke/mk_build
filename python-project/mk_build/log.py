@@ -89,4 +89,4 @@ _root_logger.addHandler(_handler)
 set_formatter(_formatter)
 
 set_detail(0)
-set_level(DEBUG)
+set_level(WARNING)
