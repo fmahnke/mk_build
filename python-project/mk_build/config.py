@@ -189,17 +189,12 @@ class Config(BaseConfig):
             build = config['build']
 
             top_source_dir = build.get('source_dir')
+            top_source_dir = ensure_type(top_source_dir, str)
+            top_source_dir = Path(top_source_dir)
+
             top_build_dir = build.get('build_dir')
-
-            if ensure_type(top_source_dir, str):
-                top_source_dir = Path(top_source_dir)
-            else:
-                top_source_dir = None
-
-            if ensure_type(top_build_dir, str):
-                top_build_dir = Path(top_build_dir)
-            else:
-                top_build_dir = None
+            top_build_dir = ensure_type(top_build_dir, str)
+            top_build_dir = Path(top_build_dir)
 
             ctx: 'Config' = Config(
                 top_source_dir,
