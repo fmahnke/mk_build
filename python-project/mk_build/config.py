@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 import os
 from os.path import exists
 import sys
@@ -5,9 +6,9 @@ from typing import Optional
 
 import tomlkit as toml
 from tomlkit import TOMLDocument
-from tomlkit.items import Table
+from tomlkit.items import InlineTable, Table
 
-from . import log
+from . import log, util
 from .build.path import Path
 from .util import cwd, environ
 from .message import build_dir_error
@@ -51,11 +52,55 @@ class BaseConfig:
         self.config[key] = value
 
 
+def _system_factory() -> str:
+    system = util.system()
+
+    if system == 'wsl':
+        return 'wsl'
+    else:
+        return 'gnu'
+
+
+@dataclass
+class Triplet:
+    cpu: str = 'x86_64'
+    vendor: str = 'pc'
+    kernel: str = 'linux'
+    system: str = field(default_factory=_system_factory)
+
+    def toml(self) -> InlineTable:
+        triplet = toml.inline_table()
+
+        triplet.add('cpu', self.cpu)
+        triplet.add('vendor', self.vendor)
+        triplet.add('kernel', self.kernel)
+        triplet.add('system', self.system)
+
+        return triplet
+
+
+@dataclass
+class System:
+    build: Triplet = field(default_factory=Triplet)
+    host: Triplet = field(default_factory=Triplet)
+    target: Triplet = field(default_factory=Triplet)
+
+    def toml(self) -> Table:
+        system = toml.table()
+
+        system.add('build', self.build.toml())
+        system.add('host', self.host.toml())
+        system.add('target', self.target.toml())
+
+        return system
+
+
 class Config(BaseConfig):
     def __init__(
         self,
         top_source_dir: Optional[Path] = None,
         top_build_dir: Optional[Path] = None,
+        system: System = System(),
         log_level: str = 'WARNING',
         verbose: int = 0,
         dry_run: Optional[bool] = None,
@@ -68,6 +113,8 @@ class Config(BaseConfig):
 
         self._top_source_dir = None
         self._top_build_dir = None
+
+        self.system = system
 
         self.log_level = log_level
         self.verbose = verbose
@@ -218,6 +265,8 @@ class Config(BaseConfig):
             build.add('build_dir', str(self.top_build_dir))
         if self.dry_run is not None:
             build.add('dry_run', self.dry_run)
+
+        build.add('system', self.system.toml())
 
         build.add('log_level', self.log_level)
         build.add('verbose', self.verbose)
