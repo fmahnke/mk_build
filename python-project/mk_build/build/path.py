@@ -7,6 +7,10 @@ PathInput: TypeAlias = Path | PathLike | str
 PathInputs: TypeAlias = PathInput | MutableSequence[PathInput]
 Paths: TypeAlias = Path | MutableSequence[Path]
 
+__all__ = [
+    'Path'
+]
+
 
 def suffix(paths: Paths, new_ext) -> Paths:
     """ Replace the suffix in path or paths. """

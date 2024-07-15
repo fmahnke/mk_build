@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Sequence, Optional
 
-from mk_build import log
 import mk_build.config as config
 from mk_build.build.path import PathInput
 from mk_build.gup import gup

@@ -39,9 +39,7 @@ def environ(key, default=None, required=True) -> str:
         return default
 
 
-def system():
-    # TODO may not actually need this
-
+def system() -> str:
     if os.path.isfile('/proc/sys/fs/binfmt_misc/WSLInterop'):
         return 'wsl'
     else:
