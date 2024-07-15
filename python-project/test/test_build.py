@@ -33,9 +33,13 @@ class TestConfig:
     top_source_dir = Path(data_dir)
     top_build_dir = Path(data_dir, '_build')
 
+    subdir_0 = Path(top_build_dir, 'subdir_0')
+
     config = config_.get()
 
     def setup_method(self) -> None:
+        os.makedirs(self.subdir_0, exist_ok=True)
+
         os.environ['top_source_dir'] = str(self.top_source_dir)
         os.environ['top_build_dir'] = str(self.top_build_dir)
 
