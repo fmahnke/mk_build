@@ -2,7 +2,9 @@ from logging import (debug, info, warning, error, DEBUG, INFO,  # noqa: F401
     WARNING, ERROR)
 import logging
 
-__all__ = ['DEBUG', 'INFO', 'WARNING', 'ERROR']
+from .util import environ
+
+__all__ = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'init']
 
 
 def set_detail(level: int) -> None:
@@ -89,4 +91,19 @@ _root_logger.addHandler(_handler)
 set_formatter(_formatter)
 
 set_detail(0)
-set_level(WARNING)
+
+
+def init(level: str) -> None:
+    global _formatter
+    global _handler
+    global _root_logger
+
+    env_level = environ('MK_LOG_LEVEL', required=False)
+
+    if env_level is None:
+        set_level(level)
+    else:
+        set_level(env_level)
+
+
+init('WARNING')

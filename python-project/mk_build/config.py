@@ -316,7 +316,7 @@ def _create(*args, **kwargs) -> Config:
     if exists(config_path):
         config = Config.from_file(config_path)
 
-        log.set_level(config.log_level)
+        log.init(config.log_level)
     else:
         config = Config(*args, **kwargs)
 
