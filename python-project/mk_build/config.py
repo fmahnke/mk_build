@@ -282,7 +282,11 @@ class Config(BaseConfig):
         return (f'Config(top_source_dir={self.top_source_dir}'
             f', top_build_dir={self.top_build_dir}'
             f', source_dir={self.source_dir}'
-            f', build_dir={self.build_dir})')
+            f', build_dir={self.build_dir}'
+            f', system={self.system}'
+            f', log_level={self.log_level}'
+            f', verbose={self.verbose}'
+            f', dry_run={self.dry_run})')
 
 
 def _set_top_build_dir() -> Path:
