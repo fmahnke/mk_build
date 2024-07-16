@@ -1,4 +1,4 @@
-from typing import Type, TypeGuard, TypeVar
+from typing import Any, Optional, Type, TypeGuard, TypeVar
 
 from .message import invalid_type
 
@@ -6,9 +6,9 @@ _T = TypeVar("_T")
 
 
 def check_type(
-    obj,
+    obj: Any,
     expected_type: Type[_T],
-    message=None
+    message: Optional[str] = None
 ) -> TypeGuard[_T]:
     if not isinstance(obj, expected_type):
         if message is None:
@@ -20,9 +20,9 @@ def check_type(
 
 
 def ensure_type(
-    obj,
+    obj: Any,
     expected_type: Type[_T],
-    message=None
+    message: Optional[str] = None
 ) -> _T:
     if not isinstance(obj, expected_type):
         if message is None:

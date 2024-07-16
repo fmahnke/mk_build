@@ -2,13 +2,17 @@
 
 import os
 import sys
+from typing import Optional
 
 from mk_build import *
 import mk_build.config as config
 
 
-def main(output=config.get().output, target=config.get().target,
-         env=os.environ) -> int:
+def main(
+    output: Optional[Path] = config.get().output,
+    target: Optional[Path] = config.get().target,
+    env: dict[str, str] = dict(os.environ)
+) -> int:
     print(f'bin  {target}')
 
     m_ldflags = env['M_LDFLAGS']

@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Iterable
+from typing import Any, Optional, Iterable
 
 from mk_build.build.path import Path, PathInput
 import mk_build.build.process as process
@@ -7,7 +7,7 @@ from mk_build.build.process import CompletedProcess
 from mk_build.config import config
 
 
-def gup_path(path) -> Optional[Path]:
+def gup_path(path: PathInput) -> Optional[Path]:
     """ Return the first parent directory of path that contains a directory
         called \"gup\", or None if it doesn't exist. """
 
@@ -32,8 +32,8 @@ def gup_path(path) -> Optional[Path]:
 
 def gup(
     *targets: PathInput | Iterable[PathInput],
-    env=None,
-    **kwargs
+    env: Optional[dict[str, str]] = None,
+    **kwargs: Any
 ) -> Optional[CompletedProcess]:
     """ Execute gup for targets. """
 

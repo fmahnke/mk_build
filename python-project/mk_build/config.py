@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 import os
 from os.path import exists
 import sys
-from typing import Optional
+from typing import Any, Optional
 
 import tomlkit as toml
 from tomlkit import TOMLDocument
@@ -30,7 +30,7 @@ class BaseConfig:
     def toml(self) -> TOMLDocument:
         return self.config
 
-    def write(self, path: str, mode='w') -> None:
+    def write(self, path: str, mode: str = 'w') -> None:
         """ Write the configuration to a file. """
 
         config_toml = self.toml()
@@ -104,8 +104,8 @@ class Config(BaseConfig):
         log_level: str = 'WARNING',
         verbose: int = 0,
         dry_run: Optional[bool] = None,
-        *args,
-        **kwargs
+        *args: Any,
+        **kwargs: Any
     ) -> None:
         """ Initialize the configuration file with arguments. """
 
@@ -155,7 +155,9 @@ class Config(BaseConfig):
         elif 'top_source_dir' not in os.environ:
             return None
         else:
-            return Path(environ('top_source_dir', required=True))
+            return Path(
+                ensure_type(environ('top_source_dir', required=True), str)
+            )
 
     @top_source_dir.setter
     def top_source_dir(self, val: Optional[Path]) -> None:
@@ -173,7 +175,9 @@ class Config(BaseConfig):
         elif 'top_build_dir' not in os.environ:
             return None
         else:
-            return Path(environ('top_build_dir', required=True))
+            return Path(
+                ensure_type(environ('top_build_dir', required=True), str)
+            )
 
     @top_build_dir.setter
     def top_build_dir(self, val: Optional[Path]) -> None:
@@ -252,7 +256,7 @@ class Config(BaseConfig):
 
         return ctx
 
-    def write(self, path: str, mode=None) -> None:
+    def write(self, path: str, mode: Optional[str] = None) -> None:
         """ Write the configuration to a file. """
 
         self.config = toml.document()
@@ -308,7 +312,7 @@ def _set_top_build_dir() -> Path:
     return Path(top_build_dir)
 
 
-def _create(*args, **kwargs) -> Config:
+def _create(*args: Any, **kwargs: Any) -> Config:
     top_build_dir = _set_top_build_dir()
 
     config_path = f'{top_build_dir}/config.toml'

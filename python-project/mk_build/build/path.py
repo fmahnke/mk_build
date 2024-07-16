@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-def suffix(paths: Paths, new_ext) -> Paths:
+def suffix(paths: Paths, new_ext: str) -> Paths:
     """ Replace the suffix in path or paths. """
 
     if isinstance(paths, MutableSequence):
@@ -21,13 +21,13 @@ def suffix(paths: Paths, new_ext) -> Paths:
         return paths.with_suffix(new_ext)
 
 
-def path(*path_segments) -> Path:
+def path(*path_segments: PathInput) -> Path:
     """ Create a Path from path_segments. """
 
     return Path(*path_segments)
 
 
-def paths(paths) -> MutableSequence[Path]:
+def paths(paths: tuple[Path]) -> MutableSequence[Path]:
     """ Convert paths to a list of Path. """
 
     return [Path(it) for it in paths]

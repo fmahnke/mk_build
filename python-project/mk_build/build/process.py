@@ -2,7 +2,7 @@ import os
 import subprocess
 from subprocess import CalledProcessError, CompletedProcess
 import sys
-from typing import Sequence
+from typing import Any, Optional, Sequence
 
 import mk_build.config as __config
 import mk_build.log as log
@@ -11,7 +11,11 @@ from mk_build.util.io import eprint
 _config = __config.get()
 
 
-def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:
+def run(
+    args: Sequence,
+    env: Optional[dict[str, str]] = None,
+    **kwargs: Any
+) -> CompletedProcess:
     """ Execute a program in a child process. """
 
     args = [str(arg) for arg in args]
@@ -31,7 +35,7 @@ def run(args: Sequence, env=None, **kwargs) -> CompletedProcess:
     if env is not None:
         env = env | os.environ
     else:
-        env = os.environ
+        env = dict(os.environ)
 
     for k, v in env.items():
         if k in exports:

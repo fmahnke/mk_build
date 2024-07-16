@@ -14,11 +14,11 @@ def set_detail(level: int) -> None:
         _formatter.format_str(_detail_str[level])
 
 
-def set_formatter(formatter) -> None:
+def set_formatter(formatter: 'Formatter') -> None:
     _handler.setFormatter(formatter)
 
 
-def set_level(level) -> None:
+def set_level(level: int | str) -> None:
     _root_logger.setLevel(level)
 
 

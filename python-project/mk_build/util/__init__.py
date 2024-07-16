@@ -20,7 +20,11 @@ def isdir(path: Optional[PathInput]) -> bool:
         return os.path.isdir(path)
 
 
-def environ(key, default=None, required=True) -> str:
+def environ(
+    key: str,
+    default: Optional[str] = None,
+    required: bool = True
+) -> Optional[str]:
     """ Return the value of an environment variable.
 
     If key names a variable in the environment, return its value. If the
