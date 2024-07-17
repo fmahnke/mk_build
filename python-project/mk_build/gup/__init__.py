@@ -33,11 +33,15 @@ def gup_path(path: PathInput) -> Optional[Path]:
 def gup(
     *targets: PathInput | Iterable[PathInput],
     env: Optional[dict[str, str]] = None,
+    jobs: Optional[int] = None,
     **kwargs: Any
 ) -> Optional[CompletedProcess[bytes]]:
     """ Execute gup for targets. """
 
     args = ["gup", "-u"]
+
+    if jobs is not None:
+        args += ['-j', str(jobs)]
 
     if config.verbose == 0:
         args.append('-q')
