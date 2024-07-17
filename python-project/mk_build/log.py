@@ -4,7 +4,16 @@ import logging
 
 from .util import environ
 
-__all__ = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'init']
+__all__ = [
+    'DEBUG',
+    'INFO',
+    'WARNING',
+    'ERROR',
+    'debug',
+    'info',
+    'init',
+    'warning'
+]
 
 
 def set_detail(level: int) -> None:

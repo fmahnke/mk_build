@@ -84,7 +84,7 @@ class TestConfig:
         build_dir_str = 'path'
         source_dir_str = build_dir_str
 
-        assert top_source_dir() == self.top_source_dir
+        assert top_source_dir() == str(self.top_source_dir)
         assert top_source_dir_add('0') == [Path(self.top_source_dir, '0')]
 
         assert source_dir_add([]) == []
@@ -94,7 +94,7 @@ class TestConfig:
             Path(f'{source_dir_str}/1')
         ]
 
-        assert top_build_dir() == Path(self.top_build_dir)
+        assert top_build_dir() == str(self.top_build_dir)
 
         assert build_dir_add([]) == []
         assert build_dir_add(['0']) == [Path(f'{build_dir_str}/0')]

@@ -34,9 +34,6 @@ module = [
     "test.test_build",
 ]
 disable_error_code = [
-    "attr-defined",
-    "comparison-overlap",
-    "no-any-return",
     "type-arg"
 ]
 

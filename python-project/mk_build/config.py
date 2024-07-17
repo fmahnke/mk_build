@@ -5,8 +5,9 @@ import sys
 from typing import Any, Optional
 
 import tomlkit as toml
-from tomlkit import Item, TOMLDocument
-from tomlkit.items import InlineTable, Table
+from tomlkit import TOMLDocument
+from tomlkit.container import Container
+from tomlkit.items import InlineTable, Item, Table
 
 from . import log, util
 from .build.path import Path
@@ -45,10 +46,10 @@ class BaseConfig:
         with open(path, 'r') as fi:
             self.config = toml.parse(fi.read())
 
-    def __getitem__(self, key: str) -> Item:
+    def __getitem__(self, key: str) -> Item | Container:
         return self.config[key]
 
-    def __setitem__(self, key: str, value: Any) -> Item:
+    def __setitem__(self, key: str, value: Any) -> None:
         self.config[key] = value
 
 
@@ -150,7 +151,7 @@ class Config(BaseConfig):
 
     @property
     def top_source_dir(self) -> Optional[Path]:
-        if self._top_source_dir is not None:
+        if isinstance(self._top_source_dir, Path):
             return self._top_source_dir
         elif 'top_source_dir' not in os.environ:
             return None
@@ -170,7 +171,7 @@ class Config(BaseConfig):
 
     @property
     def top_build_dir(self) -> Optional[Path]:
-        if self._top_build_dir is not None:
+        if isinstance(self._top_build_dir, Path):
             return self._top_build_dir
         elif 'top_build_dir' not in os.environ:
             return None

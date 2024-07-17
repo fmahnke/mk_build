@@ -8,6 +8,8 @@ import mk_build.config as __config
 import mk_build.log as log
 from mk_build.util.io import eprint
 
+__all__ = ['CalledProcessError', 'CompletedProcess', 'run']
+
 _config = __config.get()
 
 
