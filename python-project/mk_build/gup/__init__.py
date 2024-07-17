@@ -34,7 +34,7 @@ def gup(
     *targets: PathInput | Iterable[PathInput],
     env: Optional[dict[str, str]] = None,
     **kwargs: Any
-) -> Optional[CompletedProcess]:
+) -> Optional[CompletedProcess[bytes]]:
     """ Execute gup for targets. """
 
     args = ["gup", "-u"]
@@ -61,7 +61,7 @@ def gup(
         target_list += targets
 
     if len(target_list) == 0:
-        result: CompletedProcess = CompletedProcess(args, 0)
+        result: CompletedProcess[bytes] = CompletedProcess(args, 0)
     else:
         args += target_list
 

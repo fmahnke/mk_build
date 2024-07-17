@@ -31,7 +31,7 @@ class CCompileAndLink(Target):
 if __name__ == '__main__':
     dependencies = build_dir_add(os.environ['OBJECTS'].split())
 
-    builder = CCompileAndLink(dependencies=dependencies)
+    builder = CCompileAndLink(dependencies=list(dependencies))
 
     result = builder.update()
 

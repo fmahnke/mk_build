@@ -27,5 +27,5 @@ class Deps:
         return ' '.join([f'{self.build_dir}/{it}'
             for it in self.files[suffix]])
 
-    def files_list(self, suffix: str) -> list:
+    def files_list(self, suffix: str) -> list[str]:
         return [f'{self.build_dir}/{it}' for it in self.files[suffix]]

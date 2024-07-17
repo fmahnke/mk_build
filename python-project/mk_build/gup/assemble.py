@@ -10,19 +10,21 @@ config = config_.get()
 
 @dataclass
 class Assemble(Target):
-    def update(self) -> int:
+    def update(self) -> CompletedProcess[bytes]:
         super().update()
 
-        m_asm_ppflags = environ('M_ASM_PPFLAGS', '').split()
+        m_asm_ppflags = ensure_type(environ('M_ASM_PPFLAGS', ''), str).split()
         m_asm_ppflags.append(f'-I{source_dir_abs()}')
 
-        deps = environ('DEPS', '')
+        deps = ensure_type(environ('DEPS', ''), str)
 
         if deps != '':
             gup(deps.split())
 
-        source = path(top_source_dir(),
-                      path(config.target).with_suffix(''))
+        source = path(
+            top_source_dir(),
+            path(ensure_type(config.target, Path)).with_suffix('')
+        )
 
         args = (
             [tools.asm]
@@ -33,9 +35,7 @@ class Assemble(Target):
 
         gup(source)
 
-        result = run(args)
-
-        return result.returncode
+        return run(args)
 
 
 if __name__ == '__main__':

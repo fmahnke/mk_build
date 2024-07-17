@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 
-import mk_build
 from mk_build import *
 from mk_build.build.path import Path
 import mk_build.config as config
@@ -10,19 +9,21 @@ import mk_build.config as config
 
 @dataclass
 class ObjectFromC(Target):
-    def update(self) -> int:
+    def update(self) -> CompletedProcess[bytes]:
         super().update()
 
-        ppflags = mk_build.environ('M_C_PPFLAGS', '').split()
+        ppflags = ensure_type(environ('M_C_PPFLAGS', ''), str).split()
         ppflags.append(f'-I{Path(top_source_dir(), source_dir())}')
-        flags = mk_build.environ('M_C_FLAGS', '').split()
-        deps = mk_build.environ('DEPS', '')
+        flags = ensure_type(environ('M_C_FLAGS', ''), str).split()
+        deps = ensure_type(environ('DEPS', ''), str)
 
         if deps != '':
             gup(deps.split())
 
-        source = Path(top_source_dir(),
-                      path(config.get().target).with_suffix(''))
+        source = Path(
+            top_source_dir(),
+            path(ensure_type(config.get().target, Path)).with_suffix('')
+        )
 
         cc = [tools.cc]
 
@@ -30,9 +31,7 @@ class ObjectFromC(Target):
 
         gup(source)
 
-        result = run(args)
-
-        return result.returncode
+        return run(args)
 
 
 if __name__ == '__main__':

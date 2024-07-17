@@ -25,29 +25,5 @@ source = [ "mk_build" ]
 packages = [ "mk_build", "test" ]
 strict = true
 
-[[tool.mypy.overrides]]
-module = [
-    "mk_build",
-    "mk_build.config",
-    "mk_build.configure",
-    "mk_build.build.*",
-    "test.test_build",
-]
-disable_error_code = [
-    "type-arg"
-]
-
-[[tool.mypy.overrides]]
-module = [
-    "mk_build.gup.*"
-]
-disable_error_code = [
-    "arg-type",
-    "attr-defined",
-    "override",
-    "type-arg",
-    "union-attr"
-]
-
 [tool.pytest.ini_options]
 testpaths = [ "test" ]

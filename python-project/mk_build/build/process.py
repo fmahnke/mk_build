@@ -14,10 +14,10 @@ _config = __config.get()
 
 
 def run(
-    args: Sequence,
+    args: Sequence[Any],
     env: Optional[dict[str, str]] = None,
     **kwargs: Any
-) -> CompletedProcess:
+) -> CompletedProcess[bytes]:
     """ Execute a program in a child process. """
 
     args = [str(arg) for arg in args]
@@ -44,7 +44,7 @@ def run(
             log.debug(f'    {k} = {v}')
 
     if _config.dry_run:
-        result: CompletedProcess = CompletedProcess(args, 0)
+        result: CompletedProcess[bytes] = CompletedProcess(args, 0)
     else:
         try:
             result = subprocess.run(args, check=True, env=env, **kwargs)

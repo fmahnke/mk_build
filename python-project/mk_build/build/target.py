@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Sequence, Optional
 
-from mk_build import CompletedProcess
 import mk_build.config as config
 from mk_build.build.path import PathInput
 from mk_build.gup import gup
+from .process import CompletedProcess
 from ..validate import ensure_type
 
 
@@ -17,7 +17,7 @@ class Target:
     def __post_init__(self) -> None:
         self.dependencies += self.sources
 
-    def update(self) -> CompletedProcess:
+    def update(self) -> CompletedProcess[bytes]:
         print(self.name)
 
         for i in self.dependencies:

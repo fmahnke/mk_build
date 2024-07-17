@@ -13,7 +13,7 @@ import mk_build.config as config
 class Archive(Target):
     """ Builds archive files. """
 
-    def update(self) -> CompletedProcess:
+    def update(self) -> CompletedProcess[bytes]:
         super().update()
 
         args = [ar, 'rcs', config.get().output] + self.dependencies
@@ -24,7 +24,7 @@ class Archive(Target):
 if __name__ == '__main__':
     dependencies = build_dir_add(os.environ['OBJECTS'].split())
 
-    builder = Archive(dependencies=dependencies)
+    builder = Archive(dependencies=list(dependencies))
 
     result = builder.update()
 

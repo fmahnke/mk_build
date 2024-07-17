@@ -34,5 +34,5 @@ else:
     objdump = 'objdump'
 
 
-def run_link(args: list) -> CompletedProcess:
+def run_link(args: list[str]) -> CompletedProcess[bytes]:
     return run([link] + args)

@@ -13,10 +13,12 @@ from mk_build.gup.cc_and_link import CCompileAndLink
 from mk_build.util import environ
 from mk_build.util.io import eprint
 from .build import build_dir_add, source_dir_add, top_source_dir_add
+from .validate import ensure_type
 
 __all__ = [
     'depends',
     'environ',
+    'ensure_type',
     'exit',
     'gup',
     'path',

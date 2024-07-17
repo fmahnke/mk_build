@@ -32,7 +32,7 @@ def dir(path: str) -> str:
     return path[:last_sep]
 
 
-def exit(result: CompletedProcess | int) -> int:
+def exit(result: CompletedProcess[bytes] | int) -> int:
     if isinstance(result, CompletedProcess):
         return result.returncode
     else:
@@ -60,7 +60,7 @@ def top_source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
 def top_build_dir() -> str:
     """ Return the top level build directory. """
 
-    return ensure_type(config.get().top_build_dir, str)
+    return str(ensure_type(config.get().top_build_dir, Path))
 
 
 def source_dir() -> Path:
