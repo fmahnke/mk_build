@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 import os
 
-from mk_build import exit, Target, run
+from mk_build import CompletedProcess, Target, exit, run
 from mk_build.build.path import PathInput
 from mk_build.build.tools import cc
 import mk_build.config as config
@@ -15,14 +15,14 @@ from ..build import build_dir_add
 class CCompileAndLink(Target):
     libraries: Sequence[PathInput] = field(default_factory=list)
 
-    def update(self):
+    def update(self) -> CompletedProcess[bytes]:
         super().update()
 
         args = (
             [cc]
             + ['-o', config.get().output]
             + self.dependencies
-            + ['-l' + i for i in self.libraries]
+            + ['-l' + i for i in str(self.libraries)]
         )
 
         return run(args)

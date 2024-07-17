@@ -1,5 +1,5 @@
 from logging import (debug, info, warning, error, DEBUG, INFO,  # noqa: F401
-    WARNING, ERROR)
+    WARNING, ERROR, LogRecord)
 import logging
 
 from .util import environ
@@ -46,17 +46,17 @@ class Formatter(logging.Formatter):
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         format_str = _detail_str[0]
 
         self._make_formatters(format_str)
 
-    def format_str(self, format_str):
+    def format_str(self, format_str: str) -> None:
         self._make_formatters(format_str)
 
-    def format(self, record):
+    def format(self, record: LogRecord) -> str:
         if record.levelno >= 50:
             idx = 0
         elif record.levelno >= 40:
@@ -72,7 +72,7 @@ class Formatter(logging.Formatter):
 
         return formatter.format(record)
 
-    def _make_formatters(self, format_str):
+    def _make_formatters(self, format_str: str) -> None:
         self._formatters = [
             logging.Formatter(self.bold_red + format_str + self.reset),
             logging.Formatter(self.red + format_str + self.reset),

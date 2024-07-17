@@ -31,14 +31,7 @@ module = [
     "mk_build.config",
     "mk_build.configure",
     "mk_build.build.*",
-    "mk_build.gup.*",
-    "mk_build.log",
-    "mk_build.util",
-    "mk_build.util.io",
-    "mk_build.validate",
     "test.test_build",
-    "test.test_gup",
-    "test.test_targets",
 ]
 disable_error_code = [
     "attr-defined",
@@ -46,9 +39,18 @@ disable_error_code = [
     "no-any-return",
     "type-arg"
 ]
-disallow_untyped_calls = false
-check_untyped_defs = false
-disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = [
+    "mk_build.gup.*"
+]
+disable_error_code = [
+    "arg-type",
+    "attr-defined",
+    "override",
+    "type-arg",
+    "union-attr"
+]
 
 [tool.pytest.ini_options]
 testpaths = [ "test" ]

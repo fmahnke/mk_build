@@ -10,7 +10,7 @@ config = config_.get()
 
 @dataclass
 class Assemble(Target):
-    def update(self):
+    def update(self) -> int:
         super().update()
 
         m_asm_ppflags = environ('M_ASM_PPFLAGS', '').split()

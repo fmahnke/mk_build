@@ -7,6 +7,7 @@ from mk_build.build import build_dir_add, source_dir_add, top_source_dir_add
 from mk_build.build.path import *
 import mk_build.config as config_
 from mk_build.util import chdir
+from mk_build.validate import ensure_type
 
 from . import data_dir
 
@@ -43,7 +44,7 @@ class TestConfig:
         os.environ['top_source_dir'] = str(self.top_source_dir)
         os.environ['top_build_dir'] = str(self.top_build_dir)
 
-        chdir(self.config.top_build_dir)
+        chdir(ensure_type(self.config.top_build_dir, Path))
 
     def test_dirs(self) -> None:
         _source_dir = Path(self.target.parent)
@@ -53,7 +54,7 @@ class TestConfig:
 
         # indirect target
 
-        chdir(config.top_build_dir)
+        chdir(ensure_type(config.top_build_dir, Path))
 
         assert config.top_source_dir == self.top_source_dir
         assert config.top_build_dir == self.top_build_dir

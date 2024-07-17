@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 import os
 
-from mk_build import Target, exit, run
+from mk_build import CompletedProcess, Target, exit, run
 from mk_build.build import build_dir_add
 from mk_build.build.tools import ar
 import mk_build.config as config
@@ -13,7 +13,7 @@ import mk_build.config as config
 class Archive(Target):
     """ Builds archive files. """
 
-    def update(self):
+    def update(self) -> CompletedProcess:
         super().update()
 
         args = [ar, 'rcs', config.get().output] + self.dependencies

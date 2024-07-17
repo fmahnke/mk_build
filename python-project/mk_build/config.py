@@ -5,7 +5,7 @@ import sys
 from typing import Any, Optional
 
 import tomlkit as toml
-from tomlkit import TOMLDocument
+from tomlkit import Item, TOMLDocument
 from tomlkit.items import InlineTable, Table
 
 from . import log, util
@@ -45,10 +45,10 @@ class BaseConfig:
         with open(path, 'r') as fi:
             self.config = toml.parse(fi.read())
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Item:
         return self.config[key]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: Any) -> Item:
         self.config[key] = value
 
 
@@ -330,5 +330,5 @@ def _create(*args: Any, **kwargs: Any) -> Config:
 config = _create()
 
 
-def get():
+def get() -> Config:
     return config

@@ -6,6 +6,7 @@ from mk_build.build.path import Path, PathInput, path, path_dir, paths, suffix
 import mk_build.config as config
 from mk_build.gup import gup
 import mk_build.log as log
+from ..validate import ensure_type
 
 
 __all__ = [
@@ -24,7 +25,7 @@ __all__ = [
 ]
 
 
-def dir(path):
+def dir(path: str) -> str:
     """ Return the directory part of path. """
 
     last_sep = path.rfind('/')
@@ -45,13 +46,13 @@ def top_source_dir() -> str:
     'srcdir'.
     """
 
-    return config.get().top_source_dir
+    return str(config.get().top_source_dir)
 
 
 def top_source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
     """ Concatenate paths to the topsource directory. """
 
-    top_source_dir = config.get().top_source_dir
+    top_source_dir = ensure_type(config.get().top_source_dir, Path)
 
     return [path(top_source_dir, it) for it in paths]
 
@@ -59,13 +60,13 @@ def top_source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
 def top_build_dir() -> str:
     """ Return the top level build directory. """
 
-    return config.get().top_build_dir
+    return ensure_type(config.get().top_build_dir, str)
 
 
 def source_dir() -> Path:
     """ Return a Path to the current source directory. """
 
-    return config.get().source_dir
+    return ensure_type(config.get().source_dir, Path)
 
 
 def source_dir_abs() -> Path:
@@ -78,7 +79,7 @@ def source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
     """ Concatenate paths to the source directory that corresponds to the
         current build directory. """
 
-    source_dir = config.get().source_dir
+    source_dir = ensure_type(config.get().source_dir, Path)
 
     return [path(source_dir, it) for it in paths]
 
@@ -86,13 +87,13 @@ def source_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
 def build_dir() -> Path:
     """ Return a Path to the current build directory. """
 
-    return config.get().build_dir
+    return ensure_type(config.get().build_dir, Path)
 
 
 def build_dir_add(paths: Sequence[PathInput]) -> Sequence[Path]:
     """ Concatenate paths to the current build directory. """
 
-    build_dir = config.get().build_dir
+    build_dir = ensure_type(config.get().build_dir, Path)
 
     return [path(build_dir, it) for it in paths]
 

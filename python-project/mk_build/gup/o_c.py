@@ -10,7 +10,7 @@ import mk_build.config as config
 
 @dataclass
 class ObjectFromC(Target):
-    def update(self):
+    def update(self) -> int:
         super().update()
 
         ppflags = mk_build.environ('M_C_PPFLAGS', '').split()

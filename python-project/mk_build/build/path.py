@@ -8,7 +8,8 @@ PathInputs: TypeAlias = PathInput | MutableSequence[PathInput]
 Paths: TypeAlias = Path | MutableSequence[Path]
 
 __all__ = [
-    'Path'
+    'Path',
+    'PathInput'
 ]
 
 
