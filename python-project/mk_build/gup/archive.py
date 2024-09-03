@@ -21,7 +21,7 @@ class Archive(Target):
         return run(args)
 
 
-if __name__ == '__main__':
+def main():
     dependencies = build_dir_add(os.environ['OBJECTS'].split())
 
     builder = Archive(dependencies=list(dependencies))
@@ -29,3 +29,7 @@ if __name__ == '__main__':
     result = builder.update()
 
     exit(result)
+
+
+if __name__ == '__main__':
+    main()

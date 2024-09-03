@@ -38,9 +38,13 @@ class Assemble(Target):
         return run(args)
 
 
-if __name__ == '__main__':
+def main():
     builder = Assemble()
 
     result = builder.update()
 
     exit(result)
+
+
+if __name__ == '__main__':
+    main()

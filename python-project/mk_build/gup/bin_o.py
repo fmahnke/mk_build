@@ -52,7 +52,11 @@ def main(
     return 0
 
 
-if __name__ == '__main__':
-    result = main()
+def main1():
+    result = main1()
 
     sys.exit(result)
+
+
+if __name__ == '__main__':
+    main1()

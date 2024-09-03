@@ -34,9 +34,13 @@ class ObjectFromC(Target):
         return run(args)
 
 
-if __name__ == '__main__':
+def main():
     builder = ObjectFromC()
 
     result = builder.update()
 
     exit(result)
+
+
+if __name__ == '__main__':
+    main()

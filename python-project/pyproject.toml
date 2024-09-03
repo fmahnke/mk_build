@@ -18,6 +18,12 @@ test = [
 [project.scripts]
 configure = "mk_build.configure:main"
 
+"archive.py" = "mk_build.gup.archive:main"
+"assemble.py" = "mk_build.gup.assemble:main"
+"bin_o.py" = "mk_build.gup.bin_o:main1"
+"cc_and_link.py" = "mk_build.gup.cc_and_link:main"
+"o_c.py" = "mk_build.gup.o_c:main"
+
 [tool.coverage.run]
 source = [ "mk_build" ]
 
