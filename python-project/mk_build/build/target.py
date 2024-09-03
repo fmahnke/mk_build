@@ -20,8 +20,11 @@ class Target:
     def update(self) -> CompletedProcess[bytes]:
         print(self.name)
 
-        for i in self.dependencies:
-            result = ensure_type(gup(i), CompletedProcess)
+        if len(self.dependencies) == 0:
+            result: CompletedProcess[bytes] = CompletedProcess([], 0)
+        else:
+            for i in self.dependencies:
+                result = ensure_type(gup(i), CompletedProcess)
 
         return result
 
