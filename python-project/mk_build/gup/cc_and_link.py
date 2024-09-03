@@ -22,7 +22,7 @@ class CCompileAndLink(Target):
             [cc]
             + ['-o', config.get().output]
             + self.dependencies
-            + ['-l' + i for i in str(self.libraries)]
+            + ['-l' + str(i) for i in self.libraries]
         )
 
         return run(args)
