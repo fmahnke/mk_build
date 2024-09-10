@@ -96,13 +96,16 @@ class System:
         return system
 
 
+_default_log_level = 'WARNING'
+
+
 class Config(BaseConfig):
     def __init__(
         self,
         top_source_dir: Optional[Path] = None,
         top_build_dir: Optional[Path] = None,
         system: System = System(),
-        log_level: str = 'WARNING',
+        log_level: Optional[str] = None,
         verbose: int = 0,
         dry_run: Optional[bool] = None,
         *args: Any,
@@ -114,6 +117,7 @@ class Config(BaseConfig):
 
         self._top_source_dir = None
         self._top_build_dir = None
+        self._log_level = None
 
         self.system = system
 
@@ -228,6 +232,24 @@ class Config(BaseConfig):
 
         return build_dir
 
+    @property
+    def log_level(self) -> Optional[str]:
+        if isinstance(self._log_level, str):
+            return self._log_level
+        elif 'mk_log_level' not in os.environ:
+            return _default_log_level
+        else:
+            return ensure_type(environ('mk_log_level', required=True), str)
+
+    @log_level.setter
+    def log_level(self, val: Optional[str]) -> None:
+        if val is None:
+            result = None
+        else:
+            result = Path(val)
+
+        self._log_level = result
+
     @classmethod
     def from_file(cls, path: str) -> 'Config':
         """ Parse the configuration from an existing file. """
@@ -251,7 +273,7 @@ class Config(BaseConfig):
             ctx: 'Config' = Config(
                 top_source_dir,
                 top_build_dir,
-                log_level=build.get('log_level') or 'WARNING',
+                log_level=build.get('log_level') or _default_log_level,
                 verbose=build.get('verbose') or 0
             )
 
